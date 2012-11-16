@@ -3,6 +3,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
 	<script src="slider.js"></script>
+	<script src="plantGarden.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
@@ -13,6 +14,13 @@
 	list[1]=[1, "Tomato",,,,,,,,12,,,,,,,,,,,,,,,,,,,,,,,,,,"Carrot","Onion",5];
 	list[2]=[2, "Potato",,,,,,,,8,,,,,,,,,,,,,,,,,,,,,,,,,,"Tomato","Carrot",25];
 	list[3]=[3, "Carrot",,,,,,,,6,,,,,,,,,,,,,,,,,,,,,,,,,,"Onion","Tomato",10];
+	
+	site=new Object();
+	site.lenght=10;
+	site.width=15;
+	site.zone=4;
+	site.ph=7;
+	
 	</script>
 </head>
 <body>
@@ -44,6 +52,10 @@
 		</div>
 		<div id = "botright">
 			bottom right
+			<div id="plantLayout"></div>
+			<script>
+				plantGardenStraight();
+			</script>
 		</div>
 	</div>
 	
