@@ -8,7 +8,11 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 	
 	<script>
-	var list =["Onion", "Tomato", "Potato", "Carrot"];
+	var list = new Array();
+	list[0]=[0, "Onion",,,,,,,,10,,,,,,,,,,,,,,,,,,,,,,,,,,"Carrot","Potato",15];
+	list[1]=[1, "Tomato",,,,,,,,12,,,,,,,,,,,,,,,,,,,,,,,,,,"Carrot","Onion",5];
+	list[2]=[2, "Potato",,,,,,,,8,,,,,,,,,,,,,,,,,,,,,,,,,,"Tomato","Carrot",25];
+	list[3]=[3, "Carrot",,,,,,,,6,,,,,,,,,,,,,,,,,,,,,,,,,,"Onion","Tomato",10];
 	</script>
 </head>
 <body>
@@ -29,7 +33,7 @@
 		<script>
 		for(x in list)
 		{
-		makeSlider(list[x]);
+		makeSlider(window.list, x, 'lbs', 0, 50);
 		}
 		</script>
 	</div>
