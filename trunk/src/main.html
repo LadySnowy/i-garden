@@ -18,8 +18,22 @@
 	site=new Object();
 	site.lenght=10;
 	site.width=15;
-	site.zone=4;
+	site.zone=8;
 	site.ph=7;
+	site.rainfall=20;
+	site.irragate=20;
+	site.shade=5;
+	site.earlySeed=55;
+	site.lateSeed=99;
+	site.earlyHarden=80;
+	site.lateHarden=120;
+	site.earlyPlant=95;
+	site.latePlant=260;
+	site.harvestEarly=250;
+	site.harvestLate=290;
+	site.phos=35;
+	site.nit=25;
+	site.pot=30;
 	
 	</script>
 </head>
@@ -39,10 +53,9 @@
 		Center Column
 		<div id="vegList"></div>
 		<script>
-		for(x in list)
-		{
-		makeSlider(window.list, x, 'lbs', 0, 50);
-		}
+		drawList();
+		addPlant(8);
+		deletPlant(1);
 		</script>
 	</div>
 
