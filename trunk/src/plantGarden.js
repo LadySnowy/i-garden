@@ -19,26 +19,33 @@ function plantGardenStraight()
 	plot.appendChild(rec1);
 	
 	var locx=0;
-	var locy=window.list[0][9];
+	var locy=parseInt(window.list[0][9]);
 	for(x in list)
 	{
+		//get health number
+		var h = 160-(window.list[x][38]*160);
+		//calculate color from health
+		var color = "#"+((((1 << 24)+(h << 16)+(160 << 8)+h)).toString(16)).slice(1,7);
+		//alert("Data: " + color);
 		for(var i=0; i<window.list[x][37]; i++)
 		{
 			//create circle
 			//<circle id="greencircle" cx="30" cy="30" r="15" fill="green" />
 			var cir1=document.createElementNS("http://www.w3.org/2000/svg", "circle");
-			locx=locx+window.list[x][9];
-			if(locx+window.list[x][9]>window.site.width*24)
+			locx=locx+parseInt(window.list[x][9]);
+			if(locx+parseInt(window.list[x][9])>window.site.width*24)
 			{
-				locx=window.list[x][9];
-				locy=locy+(window.list[x][9]*2);
+				locx=parseInt(window.list[x][9]);
+				locy=locy+(parseInt(window.list[x][9])*2);
 			}
 			cir1.setAttribute("cx", locx);
-			locx=locx+window.list[x][9];
+			locx=locx+parseInt(window.list[x][9]);
 			cir1.setAttribute("cy", locy);
-			cir1.setAttribute("r", window.list[x][9]);
+			cir1.setAttribute("r", parseInt(window.list[x][9]));
 			cir1.setAttribute("class", window.list[x][1]);
-			cir1.style.fill = 'green';
+			//alert("Data: " + window.list[0][38]);
+			var h = 160-(window.list[x][38]*160);			
+			cir1.style.fill = color;
 		
 			plot.appendChild(cir1);
 		}
@@ -49,3 +56,11 @@ function plantGardenStraight()
 	var element=document.getElementById("plantLayout");
 	element.appendChild(plot);	
 }	
+
+function redrawGarden()
+{
+	var parent=document.getElementById("plantLayout");
+	var child=document.getElementById("garden");
+	parent.removeChild(child);
+	plantGardenStraight();
+}
