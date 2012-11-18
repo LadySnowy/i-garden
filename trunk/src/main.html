@@ -10,19 +10,19 @@
 	
 	<script>
 	var list = new Array();
-	list[0]=[0, "Onion",,,,,,,,10,,,,,,,,,,,,,,,,,,,,,,,,,,"Carrot","Potato",15];
-	list[1]=[1, "Tomato",,,,,,,,12,,,,,,,,,,,,,,,,,,,,,,,,,,"Carrot","Onion",5];
-	list[2]=[2, "Potato",,,,,,,,8,,,,,,,,,,,,,,,,,,,,,,,,,,"Tomato","Carrot",25];
-	list[3]=[3, "Carrot",,,,,,,,6,,,,,,,,,,,,,,,,,,,,,,,,,,"Onion","Tomato",10];
+	list[0]=[0, "Onion",,1,7,,,,12,10,,,,,,,,,,,,0.01,0.02,0.015,"6.0-6.5",,,,,,75,,164,165,,"Carrot","Potato",15,1];
+	list[1]=[1, "Tomato",,1,5,,,,24,12,,,,,,,,,,,,0.01,0.02,0.015,"5.0-6.0",,,,,,75,,,215,,"Carrot","Onion",5,1];
+	list[2]=[2, "Potato",,1,7,,,,12,8,,,,,,,,,,,,0.01,0.02,0.015,"6.3-6.3",,,,,,75,,,155,,"Tomato","Carrot",25,1];
+	list[3]=[3, "Carrot",,1,21,,,,15,6,,,,,,,,,,,,0.01,0.02,0.015,"6.0-6.7",,,,,,15,,90,135,,"Onion","Tomato",10,1];
 	
 	site=new Object();
 	site.lenght=10;
 	site.width=15;
 	site.zone=8;
-	site.ph=7;
+	site.ph={name:"PH",value:7,units:"ph",min:0, max: 14, step:.1};
 	site.rainfall=20;
-	site.irragate=20;
-	site.shade=5;
+	site.irragate={name:"Irragation",value:20,units:"days/inch",min:0, max: 80, step:1};
+	site.shade={name:"Shade",value:5,units:"",min:0, max: 10, step:1};
 	site.earlySeed=55;
 	site.lateSeed=99;
 	site.earlyHarden=80;
@@ -55,19 +55,27 @@
 		<script>
 		drawList();
 		addPlant(8);
-		deletPlant(1);
+		//deletPlant(1);
+		calculateHealth();
 		</script>
 	</div>
 
 	<div id = "right">
 		<div id = "topright">
 			top right
+			<div id="siteList"></div>
+			<script>
+			makeSliderObj(window.site.ph);
+			makeSliderObj(window.site.irragate);
+			makeSliderObj(window.site.shade);
+			</script>
 		</div>
 		<div id = "botright">
 			bottom right
 			<div id="plantLayout"></div>
 			<script>
 				plantGardenStraight();
+				calculateHealth();
 			</script>
 		</div>
 	</div>
