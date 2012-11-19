@@ -10,16 +10,41 @@
 	
 	<script>
 	var list = new Array();
-	list[0]=[0, "Onion",,1,7,,,,12,10,,,,,,,,,,,,0.01,0.02,0.015,"6.0-6.5",,,,,,75,,164,165,,"Carrot","Potato",15,1];
-	list[1]=[1, "Tomato",,1,5,,,,24,12,,,,,,,,,,,,0.01,0.02,0.015,"5.0-6.0",,,,,,75,,,215,,"Carrot","Onion",5,1];
-	list[2]=[2, "Potato",,1,7,,,,12,8,,,,,,,,,,,,0.01,0.02,0.015,"6.3-6.3",,,,,,75,,,155,,"Tomato","Carrot",25,1];
-	list[3]=[3, "Carrot",,1,21,,,,15,6,,,,,,,,,,,,0.01,0.02,0.015,"6.0-6.7",,,,,,15,,90,135,,"Onion","Tomato",10,1];
 	
+	list[0]={id: 0, name:"Onion", how_many: "",water_how_much: 1, water_how_often: 7, soil_temp: "",air_temp: "",
+		sunlight: "",root_depth: 12,min_spacing: 10,growing_area: "",common_pests: "",organic_pest_control: "",
+		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
+		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
+		soil_ph:"6.0-6.5",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
+		start: 75,harden: "",transplant: 164,harvest: 165,image_url: "",companions: "Carrot",antagonists:"Potato",
+		number: 15,health: 1};
+	list[1]={id: 1, name:"Tomato", how_many: "",water_how_much: 1, water_how_often: 5, soil_temp: "",air_temp: "",
+		sunlight: "",root_depth: 24,min_spacing: 12,growing_area: "",common_pests: "",organic_pest_control: "",
+		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
+		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
+		soil_ph:"5.0-6.0",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
+		start: 75,harden: "",transplant: "",harvest: 215,image_url: "",companions: "Carrot",antagonists:"Onion",
+		number: 5,health: 1};		
+	list[2]={id: 2, name:"Potato", how_many: "",water_how_much: 1, water_how_often: 7, soil_temp: "",air_temp: "",
+		sunlight: "",root_depth: 12,min_spacing: 8,growing_area: "",common_pests: "",organic_pest_control: "",
+		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
+		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
+		soil_ph:"6.3-6.3",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
+		start: 75,harden: "",transplant: "",harvest: 115,image_url: "",companions: "Tomato",antagonists:"Carrot",
+		number: 25,health: 1};	
+	list[3]={id: 3, name:"Carrot", how_many: "",water_how_much: 1, water_how_often: 21, soil_temp: "",air_temp: "",
+		sunlight: "",root_depth: 15,min_spacing: 6,growing_area:"" ,common_pests: "",organic_pest_control: "",
+		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
+		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
+		soil_ph:"6.0-6.7",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
+		start: 15,harden: "",transplant: 90,harvest: 135,image_url: "",companions: "Onion",antagonists:"Tomato",
+		number: 10,health: 1};
+
 	site=new Object();
 	site.lenght=10;
 	site.width=15;
 	site.zone=8;
-	site.ph={name:"PH",value:7,units:"ph",min:0, max: 14, step:.1};
+	site.ph={name:"PH",value:6,units:"ph",min:0, max: 14, step:.1};
 	site.rainfall=20;
 	site.irragate={name:"Irragation",value:20,units:"days/inch",min:0, max: 80, step:1};
 	site.shade={name:"Shade",value:5,units:"",min:0, max: 10, step:1};
@@ -55,7 +80,7 @@
 		<script>
 		drawList();
 		addPlant(8);
-		//deletPlant(1);
+		deletPlant(1);
 		calculateHealth();
 		</script>
 	</div>
