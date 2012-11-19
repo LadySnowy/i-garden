@@ -2,19 +2,19 @@ function makeSlider(arr,itemNum,units,min,max)
 {
 //create vegitable contanier div
 var div=document.createElement("div");
-div.id=arr[itemNum][1];
+div.id=arr[itemNum].name;
 
 //make paragraph for label
 var para=document.createElement("p");
 //make label
 var lab=document.createElement("label");
-lab.htmlFor="amount"+arr[itemNum][1];
-var node1=document.createTextNode(arr[itemNum][1]+" yeild:");
+lab.htmlFor="amount"+arr[itemNum].name;
+var node1=document.createTextNode(arr[itemNum].name+" yeild:");
 
 //make input
 var inp=document.createElement("input");
 inp.type="text";
-inp.id="amount"+arr[itemNum][1];
+inp.id="amount"+arr[itemNum].name;
 inp.style.border="0"; 
 inp.style.color="#f6931f";	
 inp.style.fontWeight="bold";
@@ -26,14 +26,14 @@ para.appendChild(inp);
 
 //make slider div
 var div1=document.createElement("div");
-div1.id="slider"+arr[itemNum][1];
+div1.id="slider"+arr[itemNum].name;
 
 //make paragraph for min max label
 var para2=document.createElement("p");
 
 //make min label
 var lab2=document.createElement("label");
-//lab.htmlFor="amount"+arr[itemNum][1];
+//lab.htmlFor="amount"+arr[itemNum].name;
 var node1=document.createTextNode(min);
 
 var para3=document.createElement("p");
@@ -60,19 +60,19 @@ div.appendChild(div1);
 var element=document.getElementById("list");
 element.appendChild(div);
 
-$( "#slider"+arr[itemNum][1] ).slider({
+$( "#slider"+arr[itemNum].name).slider({
 		//range: true,
 		min: min,
 		max: max,
-		value: arr[itemNum][37],
+		value: arr[itemNum].number,
 		slide: function( event, ui ) {	
-			arr[itemNum][37] = ui.value;
-			$( "#amount"+arr[itemNum][1] ).val(arr[itemNum][37] + " " + units);
+			arr[itemNum].number = ui.value;
+			$( "#amount"+arr[itemNum].name).val(arr[itemNum].number + " " + units);
 			redrawGarden();
 			//( ui.value + " " + units);
 		}
 	});
-	$( "#amount"+arr[itemNum][1] ).val( $( "#slider"+arr[itemNum][1]).slider( "values", 0 ) + " " + units );
+	$( "#amount"+arr[itemNum].name).val( $( "#slider"+arr[itemNum].name).slider( "values", 0 ) + " " + units );
 }	
 
 function drawList()
@@ -104,31 +104,50 @@ function redrawList()
  function addPlant(id)
  {
 	//gets plant from the database
-	$.get("getPlant.php", { id: id } , function deal(data)
+	$.get("getPlant.php", { id: id } , function (data)
 	{
+		//alert(data);
 		//splits multiple plants
 		var rows=data.split("#");
 		rows.pop();
 		
 		//handles multiple plants
+		//alert(rows);
 		for(var i = 0; i < rows.length; i++)
 		{
 			var l=rows[i].lastIndexOf("}");
-			var n=rows[i].slice(6,l);
+			var n=rows[i].slice(1,l);
+			//alert(n);
 			
 			//breaks apart the values
 			rows[i]=n.split("\":");
-			//alert("Data: " + rows);
+			//alert("Data: " + rows[i]);
 			
-			//creates an array to hold formated values
-			var m = new Array();
+			//creates an object to hold formated values
+			var m = new Object();
 			//handles the values
-			for(x in rows[i])
+			for(var x = 1; x < rows[i].length-1; x++)
 			{
-				//removes the field name
-				var j=rows[i][x].lastIndexOf(",");
-				var value = rows[i][x].slice(0,j);
-				//alert("Data: " + value);
+				if(x==1)
+				{
+					var j=rows[i][x].lastIndexOf(",");
+					var value = rows[i][x].slice(0,j);
+					var id = rows[i][x-1].slice(1);
+					//alert("Data: " + id + " " +value);
+				}else if(x==(rows[i].length-1))
+				{
+					var value = rows[i][x];
+					var c=rows[i][x-1].lastIndexOf(",");
+					var id = rows[i][x-1].slice(c+2);
+					alert("Data: " + id + " " +value);
+				}else{				
+					//removes the field name
+					var j=rows[i][x].lastIndexOf(",");
+					var value = rows[i][x].slice(0,j);
+					var c=rows[i][x-1].lastIndexOf(",");
+					var id = rows[i][x-1].slice(c+2);
+					//alert("Data: " + id + " " +value);
+				}
 				
 				//removes quotes
 				if(value.charAt(0)=="\"")
@@ -139,15 +158,15 @@ function redrawList()
 				}
 				
 				//adds value to temp array
-				m.push(value);
-				//alert("Data: " + m);
+				m[id]=value;
+				//alert("Data: " + m[id]);
 			}
 			//adds default quantity
-			m.push(10);
-			m.push(1);
+			m.number=10;
+			m.health=1;
 			//alert("Data: " + m);
 			//adds vegitable to array
-			window.list.push(m);
+			window.list.push(m);			
 		}
 		
 		redrawList();
@@ -161,7 +180,7 @@ function redrawList()
 	for(x in window.list)
 	{
 		//checks to see if id matches id of list member
-		if(window.list[x][0] == id)
+		if(window.list[x].id == id)
 		{
 			window.list.splice(x,1);
 		}
@@ -281,14 +300,30 @@ function calculateHealth()
 	for(x in window.list)
 		{
 		var health = 1;
-		health = health*(water<window.list[x][4])?water/window.list[x][4]:window.list[x][4]/water;
+		health = health*(water<window.list[x].water_how_often)?water/window.list[x].water_how_often:window.list[x].water_how_often/water;
 		//alert("Data: " + x +" "+ health);
 		
-		var y;
-		y=window.list[x][24];
+		//get the plant ph
+		y=window.list[x].soil_ph;
+		//alert(y);
+		//get the max and min value
+		s = y.indexOf("-");
+		var phmin = parseFloat(y.slice(0, s));
+		var phmax = parseFloat(y.slice(s+1));
+		//alert(phmin + " " + phmax);
+		//get the avarage and the standard divation
+		phavr=(phmax+phmin)/2;
+		phstd=(phmax-phmin)/6;
+		//correct for no standard divation
+		if(phstd == 0) phstd = 1/6;
+		//get the differance from avarage
+		phraw=Math.abs((phavr-ph)/phstd);
+		//alert(phraw);
+		health=(health/phraw>1)?health:health/phraw;
+		//alert(health);
 		
 		//save health to the array
-		window.list[x][38]=health;
+		window.list[x].health=health;
 	
 		//alert("Data:");
 		//window.document.getElementsByClassName("Onion").style.fill = colorToHex('rgb(0, 0, 0)');
