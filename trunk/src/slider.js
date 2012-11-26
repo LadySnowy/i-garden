@@ -101,8 +101,8 @@ function redrawList()
 	drawList();
 }
 
- function addPlant(id)
- {
+function addPlant(id)
+{
 	//gets plant from the database
 	$.get("getPlant.php", { id: id } , function (data)
 	{
@@ -172,10 +172,10 @@ function redrawList()
 		redrawList();
 		redrawGarden();
 	});
- }
+}
  
- function deletPlant(id)
- {
+function deletPlant(id)
+{
 	//goes throught each list member
 	for(x in window.list)
 	{
@@ -189,7 +189,7 @@ function redrawList()
 	redrawGarden();
  }
 
- function getPlants(){
+function getPlants(){
 	//gets plant from the database
 	$.get("getPlants.php", function deal(data){
 		//splits multiple plants
@@ -297,35 +297,50 @@ function calculateHealth()
 	var ph=window.site.ph.value;
 	
 	//alert("Data: " + ph);
-	for(x in window.list)
-		{
-		var health = 1;
-		health = health*(water<window.list[x].water_how_often)?water/window.list[x].water_how_often:window.list[x].water_how_often/water;
-		//alert("Data: " + x +" "+ health);
-		
-		//get the plant ph
-		y=window.list[x].soil_ph;
-		//alert(y);
-		//get the max and min value
-		s = y.indexOf("-");
-		var phmin = parseFloat(y.slice(0, s));
-		var phmax = parseFloat(y.slice(s+1));
-		//alert(phmin + " " + phmax);
-		//get the avarage and the standard divation
-		phavr=(phmax+phmin)/2;
-		phstd=(phmax-phmin)/6;
-		//correct for no standard divation
-		if(phstd == 0) phstd = 1/6;
-		//get the differance from avarage
-		phraw=Math.abs((phavr-ph)/phstd);
-		//alert(phraw);
-		health=(health/phraw>1)?health:health/phraw;
-		//alert(health);
-		
-		//save health to the array
-		window.list[x].health=health;
+	plantHealth(window.list, water, ph);
+	plantHealth(window.allList, water, ph);
+
+}
+
+function plantHealth(arr, water, ph)
+{
+	for(x in arr)
+	{
+	//set health to full
+	var health = 1;
 	
-		//alert("Data:");
-		//window.document.getElementsByClassName("Onion").style.fill = colorToHex('rgb(0, 0, 0)');
-		}
+	//get the plant ph
+	j=parseInt(arr[x].water_how_often);
+	//alert(phmin + " " + phmax);
+	//get the the standard divation
+	wstd=j/4;
+	//get the differance from avarage
+	wraw=Math.abs((j-water)/wstd);
+	//alert(phraw);		
+	health = (health/wraw>1)?health:health/wraw;
+	//alert("Data: " + x +" "+ health);
+	
+	//get the plant ph
+	y=arr[x].soil_ph;
+	//alert(y);
+	//get the max and min value
+	s = y.indexOf("-");
+	var phmin = parseFloat(y.slice(0, s));
+	var phmax = parseFloat(y.slice(s+1));
+	//alert(phmin + " " + phmax);
+	//get the avarage and the standard divation
+	phavr=(phmax+phmin)/2;
+	phstd=(phmax-phmin)/6;
+	//correct for no standard divation
+	if(phstd == 0) phstd = 1/6;
+	//get the differance from avarage
+	phraw=Math.abs((phavr-ph)/phstd);
+	//alert(phraw);
+	health=(health/phraw>1)?health:health/phraw;
+	//alert(health);
+	
+	//save health to the array
+	arr[x].health=health;
+
+	}
 }
