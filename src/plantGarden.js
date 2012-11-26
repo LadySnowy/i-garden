@@ -17,6 +17,19 @@ function plantGardenStraight()
 	//add the rectangle
 	plot.appendChild(rec1);
 	
+	//create array
+	var sort = new Array();
+	for(x in window.list)
+	{
+		//get each plant
+		for(var i=0; i<parseInt(window.list[x].number); i++)
+		{
+			sort.push(window.list[x].name);
+		
+		}
+	}
+	//alert(sort);
+	
 	//set the first position
 	var locx=0;
 	var locy=parseInt(window.list[0].min_spacing);
@@ -24,10 +37,8 @@ function plantGardenStraight()
 	for(x in window.list)
 	{
 	//alert(window.list[x].number);
-		//get health number
-		var h = 160-(window.list[x].health*160);
-		//calculate color from health
-		var color = "#"+((((1 << 24)+(h << 16)+(160 << 8)+h)).toString(16)).slice(1,7);
+		//get plant color
+		var color = calcColor(window.list[x].health);
 		
 		//go thru each plant		
 		for(var i=0; i<parseInt(window.list[x].number); i++)
@@ -65,6 +76,15 @@ function plantGardenStraight()
 	//add images contanier to plantLayout
 	var element=document.getElementById("plantLayout");
 	element.appendChild(plot);	
+}
+
+function calcColor(arrHealth)
+{
+	//get health number
+	var h = 160-(arrHealth*160);
+	//calculate color from health
+	var color = "#"+((((1 << 24)+(h << 16)+(160 << 8)+h)).toString(16)).slice(1,7);
+	return color;
 }	
 
 function redrawGarden()
@@ -73,4 +93,5 @@ function redrawGarden()
 	var child=document.getElementById("garden");
 	parent.removeChild(child);
 	plantGardenStraight();
+	//alert(window.allList);
 }
