@@ -2,8 +2,14 @@
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js"></script>
+	
 	<script src="slider.js"></script>
 	<script src="plantGarden.js"></script>
+	<script src="graph.js"></script>
+	
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
@@ -37,7 +43,7 @@
 		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
 		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
 		soil_ph:"6.0-6.7",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
-		start: 15,harden: "",transplant: 90,harvest: 135,image_url: "",companions: "Onion",antagonists:"Tomato",
+		start: 15,harden: "",transplant: 90,harvest: 135,image_url: "",companions: "Onion",antagonists:"Carrot",
 		number: 10,health: 1};
 
 	site=new Object();
@@ -60,6 +66,11 @@
 	site.nit=25;
 	site.pot=30;
 	
+	var allList = new Array();
+	
+	//getPlantInfo();
+	
+	
 	</script>
 </head>
 <body>
@@ -68,6 +79,9 @@
 	<div id="left">
 		<div id="topleft">
 			top left
+			<script>
+			getPlantInfo(foGra);
+			</script>
 		</div>
 		<div id="botleft">
 			bottom left
@@ -79,9 +93,9 @@
 		<div id="vegList"></div>
 		<script>
 		drawList();
-		addPlant(8);
-		deletPlant(1);
-		calculateHealth();
+		addPlant(20);
+		//deletPlant(1);
+		calculateHealth();		
 		</script>
 	</div>
 
@@ -92,7 +106,7 @@
 			<script>
 			makeSliderObj(window.site.ph);
 			makeSliderObj(window.site.irragate);
-			makeSliderObj(window.site.shade);
+			makeSliderObj(window.site.shade);			
 			</script>
 		</div>
 		<div id = "botright">
