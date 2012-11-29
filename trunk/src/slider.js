@@ -3,6 +3,7 @@ function makeSlider(arr,itemNum,units,min,max)
 //create vegitable contanier div
 var div=document.createElement("div");
 div.id=arr[itemNum].name;
+div.style.backgroundColor=calcColor(arr[itemNum].health);	
 
 //make paragraph for label
 var para=document.createElement("p");
@@ -69,6 +70,7 @@ $( "#slider"+arr[itemNum].name).slider({
 			arr[itemNum].number = ui.value;
 			$( "#amount"+arr[itemNum].name).val(arr[itemNum].number + " " + units);
 			redrawGarden();
+			redrawList();
 			//( ui.value + " " + units);
 		}
 	});
@@ -283,6 +285,7 @@ $( "#slider"+obj.name ).slider({
 			$( "#amount"+obj.name).val(obj.value + " " + obj.units);
 			calculateHealth();
 			redrawGarden();
+			redrawList();
 			//( ui.value + " " + units);
 		}
 	});
@@ -343,4 +346,85 @@ function plantHealth(arr, water, ph)
 	arr[x].health=health;
 
 	}
+}
+
+function log(msg) {
+    setTimeout(function() {
+        throw new Error(msg);
+    }, 0);
+}
+
+function getRecipeInfo(callback)
+{
+	//gets plants from the database
+	$.get("getRecipeInfo.php", function (data)
+	{
+		//log(data);
+		//splits multiple plants
+		
+		var rows=data.split("#");
+		rows.pop();
+		
+		//handles multiple plants
+		//alert(rows);
+		for(var i = 0; i < rows.length; i++)
+		{
+			var l=rows[i].lastIndexOf("}");
+			var n=rows[i].slice(1,l);
+			//alert(n);
+						
+			//breaks apart the values
+			rows[i]=n.split("\":");
+			//alert("Data: " + rows[i]);
+			/*
+			//creates an object to hold formated values
+			var m = new Object();
+			//handles the values
+			for(var x = 1; x < rows[i].length-1; x++)
+			{			
+				if(x==1)
+				{
+					var j=rows[i][x].lastIndexOf(",");
+					var value = rows[i][x].slice(0,j);
+					var id = rows[i][x-1].slice(1);
+					//alert("Data: " + id + " " +value);
+				}else if(x==(rows[i].length-1))
+				{
+					var value = rows[i][x];
+					var c=rows[i][x-1].lastIndexOf(",");
+					var id = rows[i][x-1].slice(c+2);
+					//alert("Data: " + id + " " +value);
+				}else{				
+					//removes the field name
+					var j=rows[i][x].lastIndexOf(",");
+					var value = rows[i][x].slice(0,j);
+					var c=rows[i][x-1].lastIndexOf(",");
+					var id = rows[i][x-1].slice(c+2);
+					//alert("Data: " + id + " " +value);
+				}
+				
+				//removes quotes
+				if(value.charAt(0)=="\"")
+				{
+					var k=value.length-1;
+					//alert("Data: " + k);
+					value=value.slice(1,k);
+				}
+				
+				//adds value to temp array
+				m[id]=value;
+				//alert("Data: " + m[id]);				
+			}
+			//adds default quantity
+			//alert("Data: " + m);
+			//adds vegitable to array
+			window.allList.push(m);
+			//window.list.push(m);	
+			*/
+		}
+		//alert(window.allList);
+		callback();
+		
+	});
+	//alert(window.allList);
 }

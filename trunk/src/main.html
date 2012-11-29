@@ -67,6 +67,7 @@
 	site.pot=30;
 	
 	var allList = new Array();
+	var recipeList = new Array();
 	
 	//getPlantInfo();
 	
@@ -84,7 +85,10 @@
 			</script>
 		</div>
 		<div id="botleft">
-			bottom left
+			bottom left 
+			<script>
+			getRecipeInfo();
+			</script>
 		</div>
 	</div>
 	
@@ -95,7 +99,8 @@
 		drawList();
 		addPlant(20);
 		//deletPlant(1);
-		calculateHealth();		
+		calculateHealth();	
+		drawList();
 		</script>
 	</div>
 
