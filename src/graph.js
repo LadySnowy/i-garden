@@ -135,7 +135,7 @@ function foGra()
 		.size([w, h])
 		.linkDistance(function(d) { return d.type; })
 		//.linkStrength(function(d) { return d.str; })		
-		.charge(0)
+		.charge(1)
 		.gravity(.15)
 		.friction(.9)
 		.start();
@@ -197,6 +197,7 @@ function foGra()
 		  .style("fill", function(d, i) { return calcColor(window.allList, i); })
 		  .style("stroke", function(d, i) { return d3.rgb(calcColor(window.allList, i)).darker(2); });
 	});
+
 
 	//re-scatters on click
 	d3.select("#topleft").on("click", function() {
