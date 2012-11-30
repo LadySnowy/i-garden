@@ -5,18 +5,19 @@
 	<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js"></script>
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js"></script>
-	
+
 	<script src="slider.js"></script>
 	<script src="plantGarden.js"></script>
 	<script src="graph.js"></script>
-	
+	<script src="tabs.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-	
+
 	<script>
 	var list = new Array();
-	
+
 	list[0]={id: 0, name:"Onion", how_many: "",water_how_much: 1, water_how_often: 7, soil_temp: "",air_temp: "",
 		sunlight: "",root_depth: 12,min_spacing: 10,growing_area: "",common_pests: "",organic_pest_control: "",
 		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
@@ -30,14 +31,14 @@
 		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
 		soil_ph:"5.0-6.0",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
 		start: 75,harden: "",transplant: "",harvest: 215,image_url: "",companions: "Carrot",antagonists:"Onion",
-		number: 5,health: 1};		
+		number: 5,health: 1};
 	list[2]={id: 2, name:"Potato", how_many: "",water_how_much: 1, water_how_often: 7, soil_temp: "",air_temp: "",
 		sunlight: "",root_depth: 12,min_spacing: 8,growing_area: "",common_pests: "",organic_pest_control: "",
 		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
 		language_of_flowers: "",life_cycle: "",soil_nitrogen: .01,soil_phosphorus: .02,soil_potassium: .015,
 		soil_ph:"6.3-6.3",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
 		start: 75,harden: "",transplant: "",harvest: 115,image_url: "",companions: "Tomato",antagonists:"Carrot",
-		number: 25,health: 1};	
+		number: 25,health: 1};
 	list[3]={id: 3, name:"Carrot", how_many: "",water_how_much: 1, water_how_often: 21, soil_temp: "",air_temp: "",
 		sunlight: "",root_depth: 15,min_spacing: 6,growing_area:"" ,common_pests: "",organic_pest_control: "",
 		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
@@ -65,13 +66,13 @@
 	site.phos=35;
 	site.nit=25;
 	site.pot=30;
-	
+
 	var allList = new Array();
 	var recipeList = new Array();
-	
+
 	//getPlantInfo();
-	
-	
+
+
 	</script>
 </head>
 <body>
@@ -80,28 +81,26 @@
 	<div id="left">
 		<div id="topleft">
 			top left
-			<script>
-			getPlantInfo(foGra);
-			</script>
 		</div>
 		<div id="botleft">
-			bottom left 
+			bottom left
 			<script>
 			getRecipeInfo();
 			</script>
 		</div>
 	</div>
-	
+
 	<div id = "center">
 		Center Column
-		<div id="vegList"></div>
-		<script>
-		drawList();
-		addPlant(20);
-		//deletPlant(1);
-		calculateHealth();	
-		drawList();
-		</script>
+		<div id="vegList">
+			<script>
+				drawList();
+				addPlant(20);
+				//deletPlant(1);
+				calculateHealth();
+				drawList();
+			</script>
+		</div>
 	</div>
 
 	<div id = "right">
@@ -111,20 +110,42 @@
 			<script>
 			makeSliderObj(window.site.ph);
 			makeSliderObj(window.site.irragate);
-			makeSliderObj(window.site.shade);			
+			makeSliderObj(window.site.shade);
 			</script>
 		</div>
-		<div id = "botright">
+		<div id = "botright" class="tabcontainer">
 			bottom right
-			<div id="plantLayout"></div>
+			<ul class="tabs" id="sidebarTabs">
+				<li id="tab1" class="selected"  onclick="tabs(this);">Plant Thing</li>
+				<li id="tab2" onclick="tabs(this);">Garden Layout</li>
+				<li id="tab3" onclick="tabs(this);">Graph Thing</li>
+			</ul>
+			<div id="tabContent">
+				Teresa, put your parallel coords thing here....
+			</div>
+		</div>
+
+		<div id="tab1Content" style="display:none;">
+			and here.
+		</div>
+
+		<div id="tab2Content" style="display:none;">
+			<div id="plantLayout">
+				<script>
+					plantGardenStraight();
+					calculateHealth();
+				</script>
+			</div>
+		</div>
+
+		<div id="tab3Content" style="display:none;">
+			the node link thing is supposed to be here. not sure why it is just drawing it on the whole page.
 			<script>
-				plantGardenStraight();
-				calculateHealth();
+				getPlantInfo(foGra);
 			</script>
 		</div>
-	</div>
-	
 
+	</div>
 </div>
 
 </body>
