@@ -125,7 +125,7 @@ function foGra()
 	//alert(links);
 
 
-	var vis = d3.select("#topleft").append("svg:svg")
+	var vis = d3.select("#forcegraph").append("svg:svg")
 		.attr("width", w)
 		.attr("height", h);
 
@@ -200,7 +200,7 @@ function foGra()
 
 
 	//re-scatters on click
-	d3.select("#topleft").on("click", function() {
+	d3.select("#forcegraph").on("click", function() {
 	  nodes.forEach(function(o, i) {
 		o.x += (Math.random() - .5) * 40;
 		o.y += (Math.random() - .5) * 40;
