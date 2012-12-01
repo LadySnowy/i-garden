@@ -27,3 +27,11 @@
  
     }
   }
+  
+ function simple_tab(id) {
+    $('#navtab_'+id).siblings('li').removeClass('active');
+    $('#navtab_'+id).addClass('active');
+    
+    $('#tab_'+id).siblings('.tab').hide();
+    $('#tab_'+id).show();
+}

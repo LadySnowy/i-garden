@@ -62,7 +62,7 @@
 	margin:10px 0;
 }
 
-.tabcontainer .tabs{
+.tabcontainer .tab_nav{
 	list-style:none;
 	display:block;
 	overflow:hidden;
@@ -73,7 +73,13 @@
 	top:1px;
 }
 
-.tabcontainer .tabs li{
+.tabcontainer .tab_nav ul {
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+}
+
+.tabcontainer .tab_nav li{
 	float:left;
 	background-color:green;
 	border:1px solid #e1e1e1;
@@ -87,12 +93,19 @@
 	color:#fff;
 }
 
-.tabcontainer .tabs .selected{
+.tabcontainer .tab_nav ul li a {
+    display: block;
+    margin: 2px;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+
+.tabcontainer .tab_nav ul li.active{
 	background-color:#fff;
-	color:#393939;
+	color:#000;
 }
 	
-#tabContent{
+.tabcontainer .tab{
 	padding:10px;
 	background-color:#fff;
 	overflow:hidden;
