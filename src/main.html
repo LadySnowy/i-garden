@@ -9,6 +9,7 @@
 	<script src="slider.js"></script>
 	<script src="plantGarden.js"></script>
 	<script src="graph.js"></script>
+	<script src="cale.js"></script>
 	<script src="tabs.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -68,10 +69,9 @@
 	site.pot=30;
 
 	var allList = new Array();
+	var allListReady = 0;
 	var recipeList = new Array();
-
-	//getPlantInfo();
-
+	var recipeListReady = 0;
 
 	</script>
 </head>
@@ -80,7 +80,7 @@
 <div id="container">
 	<div id="left">
 		<div id="topleft">
-			top left
+			top left						
 		</div>
 		<div id="botleft">
 			bottom left
@@ -98,7 +98,6 @@
 				addPlant(20);
 				//deletPlant(1);
 				calculateHealth();
-				drawList();
 			</script>
 		</div>
 	</div>
@@ -111,7 +110,14 @@
 			makeSliderObj(window.site.ph);
 			makeSliderObj(window.site.irragate);
 			makeSliderObj(window.site.shade);
+			cale();
+			</script>	
+			Hardiness Zone <input id="zone" type="text" size="3"/> Avarage Anual Rainfall <input id="rain" type="text" size="3"/>
+			<script>
+			document.getElementById('zone').onchange=function(){site.zone = document.getElementById('zone').value; alert(site.zone);};
+			document.getElementById('rain').onchange=function(){site.rainfall = document.getElementById('rain').value; alert(site.rainfall);}
 			</script>
+			
 		</div>
 		<div id = "botright" class="tabcontainer">
 			bottom right
@@ -130,19 +136,30 @@
 		</div>
 
 		<div id="tab2Content" style="display:none;">
-			<div id="plantLayout">
-				<script>
-					plantGardenStraight();
-					calculateHealth();
-				</script>
-			</div>
+			<div id="forcegraphcircle"></div>			
+			<script>
+			if(!allListReady)
+			{
+				getPlantInfo(foGraCircle, window.allList);
+			}else
+			{
+				foGraCircle(window.allList);
+			}			
+			</script>
 		</div>
 
 		<div id="tab3Content" style="display:none;">
 			the node link thing is supposed to be here. not sure why it is just drawing it on the whole page.
+			<div id="forcegraph"></div>			
 			<script>
-				getPlantInfo(foGra);
-			</script>
+			if(!allListReady)
+			{
+				getPlantInfo(foGra, window.allList);
+			}else
+			{
+				foGra(window.allList);
+			}		
+			</script>			
 		</div>
 
 	</div>
