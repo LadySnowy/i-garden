@@ -119,50 +119,51 @@
 			</script>
 			
 		</div>
+		
 		<div id = "botright" class="tabcontainer">
 			bottom right
-			<ul class="tabs" id="sidebarTabs">
-				<li id="tab1" class="selected"  onclick="tabs(this);">Plant Thing</li>
-				<li id="tab2" onclick="tabs(this);">Garden Layout</li>
-				<li id="tab3" onclick="tabs(this);">Graph Thing</li>
-			</ul>
-			<div id="tabContent">
-				Teresa, put your parallel coords thing here....
+			<div class="tab_nav">
+				<ul>
+					<li id="navtab_tab1"><a href="javascript:simple_tab('tab1')">Plant Thing</a></li>
+					<li id="navtab_tab2"><a href="javascript:simple_tab('tab2')">Garden Layout</a></li>
+					<li id="navtab_tab3"><a href="javascript:simple_tab('tab3')">Graph Thing</a></li>
+				</ul>
 			</div>
-		</div>
+	
+			<div id="tab_tab1" class="tab">
+				info vis here
+			</div>
 
-		<div id="tab1Content" style="display:none;">
-			and here.
-		</div>
+			<div id="tab_tab2" class="tab" style="display:none;">
+					<div id="forcegraphcircle">			
+					<script>
+					if(!allListReady)
+					{
+						getPlantInfo(foGraCircle, window.allList);
+					}else
+					{
+						foGraCircle(window.allList);
+					}			
+					</script>
+				</div>
+			</div>
 
-		<div id="tab2Content" style="display:none;">
-			<div id="forcegraphcircle"></div>			
-			<script>
-			if(!allListReady)
-			{
-				getPlantInfo(foGraCircle, window.allList);
-			}else
-			{
-				foGraCircle(window.allList);
-			}			
-			</script>
-		</div>
-
-		<div id="tab3Content" style="display:none;">
-			the node link thing is supposed to be here. not sure why it is just drawing it on the whole page.
-			<div id="forcegraph"></div>			
-			<script>
-			if(!allListReady)
-			{
-				getPlantInfo(foGra, window.allList);
-			}else
-			{
-				foGra(window.allList);
-			}		
-			</script>			
-		</div>
-
+			<div id="tab_tab3" class="tab" style="display:none;">
+				the node link thing is supposed to be here. not sure why it is just drawing it on the whole page.
+				<div id="forcegraph">		
+					<script>
+					if(!allListReady)
+					{
+						getPlantInfo(foGra, window.allList);
+					}else
+					{
+						foGra(window.allList);
+					}		
+					</script>		
+				</div>					
+			</div>
 	</div>
+</div>
 </div>
 
 </body>
