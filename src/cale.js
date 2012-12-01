@@ -8,22 +8,29 @@ var padding = 20;
 
 //log(width);
 
+var data = [
+  {phase:1, early:new Date(2012, 1, 24), late:new Date(2012, 3, 9)},
+  {phase:2, early:new Date(2012, 2, 21), late:new Date(2012, 4, 1)},
+  {phase:3, early:new Date(2012, 3, 5), late:new Date(2012, 8, 17)},
+  {phase:4, early:new Date(2012, 8, 7), late:new Date(2012, 9, 17)},
+];
+
 //add svg to sitelist
 var dayLength = d3.select("#siteList").
   append("svg:svg").
   attr("width", width).
   attr("height", height + padding * 2);
   
-var x = d3.time.scale().domain([new Date(2011, 0, 1), new Date(2011, 11, 31)]).range([0, width]);
+var x = d3.time.scale().domain([new Date(2012, 0, 1), new Date(2012, 11, 31)]).range([0, width]);
 
 var monthNames = ["Jan", "Feb", "Mar", "April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function midMonthDates() {
-  return d3.range(0, 12).map(function(i) { return new Date(2011, i, 15) });
+  return d3.range(0, 12).map(function(i) { return new Date(2012, i, 15) });
 }
 
 function beginMonthDates() {
-  return d3.range(0, 12).map(function(i) { return new Date(2011, i, 1) });
+  return d3.range(0, 12).map(function(i) { return new Date(2012, i, 1) });
 }
 
 // create a group for the sunrise and sunset paths
@@ -38,11 +45,41 @@ lineGroup.append("svg:rect").
   attr("y", 0).
   attr("height", height).
   attr("width", width).
-  attr("fill", "lightyellow");
-
+  attr("fill", "white");
   
- //this is where I draw the data
+//log(x(data[0].early));
  
+//this is where I draw the data
+{
+//draw the starting 
+lineGroup.append("svg:rect").
+  attr("x", x(data[0].early)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(data[0].late)-x(data[0].early)).
+  attr("fill", "rgba(171, 96, 107, 0.33)");
+//draw the harding
+lineGroup.append("svg:rect").
+  attr("x", x(data[1].early)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(data[1].late)-x(data[1].early)).
+  attr("fill", "rgba(143, 126, 233, 0.33)");
+}
+//draw the transplanting
+lineGroup.append("svg:rect").
+  attr("x", x(data[2].early)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(data[2].late)-x(data[2].early)).
+  attr("fill", "rgba(133, 189, 83, 0.33)");
+//draw the Harvest
+lineGroup.append("svg:rect").
+  attr("x", x(data[3].early)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(data[3].late)-x(data[3].early)).
+  attr("fill", "rgba(171, 176, 107, 0.55)");
  
  
 
