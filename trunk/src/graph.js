@@ -1,4 +1,4 @@
-function getPlantInfo(callback)
+function getPlantInfo(callback, arr)
 {
 	//gets plants from the database
 	$.get("getPlantsInfo.php", function (data)
@@ -68,18 +68,18 @@ function getPlantInfo(callback)
 			
 		}
 		//alert(window.allList);
-		callback();
+		callback(arr);
 	});
 	//alert(window.allList);
 }
 
-function foGra()
+function foGra(arr)
 {
-	//alert(window.allList.length);
+	///alert(arr);
 	var w = 500,
 		h = 400,
 		fill = d3.scale.category10(),
-		nodes = window.allList.map(Object);
+		nodes = arr.map(Object);
 		nodes.forEach(function(o, i) {
 			o.y = 200+(150*(Math.sin((2*3.14/59)*(i+.5))));
 			o.x = 250+(150*(Math.cos((2*3.14/59)*(i+.5))));
@@ -166,7 +166,7 @@ function foGra()
 		.style("stroke-width", 1.5)
 		.call(force.drag);
 	//alert(nodes);
-	//alert(window.allList[i].min_spacing);
+	//alert(arr[i].min_spacing);
 	//function(d, i) { return d.min_spacing; })
 
 	vis.style("opacity", 1e-6)
@@ -194,13 +194,124 @@ function foGra()
 
 	  node.attr("cx", function(d) { return d.x; })
 		  .attr("cy", function(d) { return d.y; })
-		  .style("fill", function(d, i) { return calcColor(window.allList, i); })
-		  .style("stroke", function(d, i) { return d3.rgb(calcColor(window.allList, i)).darker(2); });
+		  .style("fill", function(d, i) { return calcColor(d.health); })
+		  .style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); });
 	});
 
 
 	//re-scatters on click
 	d3.select("#forcegraph").on("click", function() {
+	  nodes.forEach(function(o, i) {
+		o.x += (Math.random() - .5) * 40;
+		o.y += (Math.random() - .5) * 40;
+	  });
+	  force.resume();
+	});
+}
+
+function foGraCircle(arr)
+{
+	///alert(arr);
+	var w = 500,
+		h = 400,
+		fill = d3.scale.category10(),
+		nodes = arr.map(Object);
+		nodes.forEach(function(o, i) {
+			o.y = 200+(150*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = 250+(150*(Math.cos((2*3.14/59)*(i+.5))));
+		});
+		links = new Array();
+	//alert(fill);
+	//alert(nodes);
+	var r_table = {};
+	for( var i = 0; i < nodes.length; i++ ) {
+		r_table[nodes[i].id] = i;
+	}
+	var compLink=0;
+	//alert(r_table[58]);
+	for(x in nodes)
+	{
+		//alert(nodes[x].companions);
+		com = nodes[x].companions.split(", ");
+		
+		if(com.length > 1)
+		{
+			for(j in com)
+			{
+				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
+				links.push({source: nodes[x], target: nodes[r_table[com[j]]], type: 100, str: .8, color: "#0000FF"});				
+			}
+		}
+		//links.push({source: nodes[1], target: nodes[2]});
+		
+		anta = nodes[x].antagonists.split(", ");
+		
+		if(anta.length > 1)
+		{
+			for(j in anta)
+			{
+				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
+				links.push({source: nodes[x], target: nodes[r_table[anta[j]]], type: 200, str: 1, color: "#FF0000"});				
+			}
+		}
+		//links.push({source: nodes[1], target: nodes[2]});
+	
+	}
+	//links.push({source: nodes[1], target: nodes[2]});
+	//alert(links);
+
+
+	var vis = d3.select("#forcegraphcircle").append("svg:svg")
+		.attr("width", w)
+		.attr("height", h);
+
+	var force = d3.layout.force()
+		.nodes(nodes)
+		.links(links)
+		.size([w, h])
+		.linkDistance(function(d) { return d.type; })
+		//.linkStrength(function(d) { return d.str; })		
+		.charge(1)
+		.gravity(.15)
+		.friction(.9)
+		.start();
+	
+	var link = vis.selectAll("line.link")
+      .data(links)
+    .enter().insert("svg:line", "circle.node")	
+      .attr("class", "link")
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; })
+	  .style("stroke", function(d) { return d.color; } )
+	  .style("stroke-width", 1.5);
+
+
+	var node = vis.selectAll("circle.node")
+		.data(nodes)
+	  .enter().append("svg:circle")
+		.attr("class", "node")
+		.attr("cx", function(d, i) { return d.x; })
+		//d.x=250+(150*(Math.cos((2*3.14/59)*(i+.5))));
+		.attr("cy", function(d, i) { return d.y; })
+		//d.y=200+(150*(Math.sin((2*3.14/59)*(i+.5)))); 
+		.attr("r", 8)
+		.style("fill", function(d, i) { return calcColor(d.health); })
+		.style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); })
+		.style("stroke-width", 1.5)
+		.call(force.drag);
+	//alert(nodes);
+	//alert(arr[i].min_spacing);
+	//function(d, i) { return d.min_spacing; })
+
+	vis.style("opacity", 1e-6)
+	  .transition()
+		.duration(1000)
+		.style("opacity", 1);
+
+	//re-scatters on click
+	d3.select("#forcegraphcircle").on("click", function() {
 	  nodes.forEach(function(o, i) {
 		o.x += (Math.random() - .5) * 40;
 		o.y += (Math.random() - .5) * 40;

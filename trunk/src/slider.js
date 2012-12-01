@@ -69,13 +69,18 @@ $( "#slider"+arr[itemNum].name).slider({
 		slide: function( event, ui ) {	
 			arr[itemNum].number = ui.value;
 			$( "#amount"+arr[itemNum].name).val(arr[itemNum].number + " " + units);
-			redrawGarden();
-			redrawList();
+			redra();
 			//( ui.value + " " + units);
 		}
 	});
 	$( "#amount"+arr[itemNum].name).val( $( "#slider"+arr[itemNum].name).slider( "values", 0 ) + " " + units );
 }	
+
+function redra()
+{
+	//redrawGarden();
+	redrawList();
+}
 
 function drawList()
 {
@@ -171,8 +176,7 @@ function addPlant(id)
 			window.list.push(m);			
 		}
 		
-		redrawList();
-		redrawGarden();
+		redra();
 	});
 }
  
@@ -187,8 +191,7 @@ function deletPlant(id)
 			window.list.splice(x,1);
 		}
 	}
-	redrawList();
-	redrawGarden();
+	redra();
  }
 
 function getPlants(){
@@ -284,8 +287,7 @@ $( "#slider"+obj.name ).slider({
 			obj.value = ui.value;
 			$( "#amount"+obj.name).val(obj.value + " " + obj.units);
 			calculateHealth();
-			redrawGarden();
-			redrawList();
+			redra();
 			//( ui.value + " " + units);
 		}
 	});
