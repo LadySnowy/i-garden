@@ -10,7 +10,7 @@ var para=document.createElement("p");
 //make label
 var lab=document.createElement("label");
 lab.htmlFor="amount"+arr[itemNum].name;
-var node1=document.createTextNode(arr[itemNum].name+" yeild:");
+var node1=document.createTextNode(arr[itemNum].name+" yield:");
 
 //make input
 var inp=document.createElement("input");
@@ -78,6 +78,7 @@ $( "#slider"+arr[itemNum].name).slider({
 
 function redra()
 {
+	calculateHealth();
 	//redrawGarden();
 	redrawList();
 }
@@ -286,7 +287,6 @@ $( "#slider"+obj.name ).slider({
 		slide: function( event, ui ) {	
 			obj.value = ui.value;
 			$( "#amount"+obj.name).val(obj.value + " " + obj.units);
-			calculateHealth();
 			redra();
 			//( ui.value + " " + units);
 		}
