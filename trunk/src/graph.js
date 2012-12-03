@@ -77,18 +77,16 @@ function getPlantInfo(callback, arr, callback1, arr1)
 function foGra(arr)
 {
 	//alert(arr);
-	var w = 1000,
-		//d3.select("#botright").style("width").slice(0,-2)*.93,
-		h = 1000,
-		//d3.select("#botright").style("height").slice(0,-2)-130,
-		raScale = 34,
+	var w = d3.select("#botright").style("width").slice(0,-2)*.93,
+		h = d3.select("#botright").style("height").slice(0,-2)-130,
+		raScale = 8,
 		fill = d3.scale.category10(),
 		//created an array called nodes containint all of the objects of the passed arr
 		nodes = arr.map(Object);
 		//adds extra attribute to each object in the nodes array
 		nodes.forEach(function(o, i) {
-			o.y = (h/2)+(650*(Math.sin((2*3.14/59)*(i+.5))));
-			o.x = (w/2)+(650*(Math.cos((2*3.14/59)*(i+.5))));
+			o.y = (h/2)+(150*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = (w/2)+(150*(Math.cos((2*3.14/59)*(i+.5))));
 			o.r = raScale;
 		});
 		links = new Array();
@@ -110,7 +108,7 @@ function foGra(arr)
 			for(j in com)
 			{
 				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
-				links.push({source: nodes[x], target: nodes[r_table[com[j]]], type: 200, str: .8, color: "#0000FF"});				
+				links.push({source: nodes[x], target: nodes[r_table[com[j]]], type: 100, str: .8, color: "#0000FF"});				
 			}
 		}
 				
@@ -121,7 +119,7 @@ function foGra(arr)
 			for(j in anta)
 			{
 				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
-				links.push({source: nodes[x], target: nodes[r_table[anta[j]]], type: 400, str: 1, color: "#FF0000"});				
+				links.push({source: nodes[x], target: nodes[r_table[anta[j]]], type: 200, str: 1, color: "#FF0000"});				
 			}
 		}
 			
@@ -169,11 +167,14 @@ function foGra(arr)
 		.style("fill", function(d, i) { return calcColor(d.health); })
 		.style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); })
 		.style("stroke-width", 1.5)
-		.call(force.drag);
+		.call(force.drag)
+		.on("mouseover", fade(.1, vis, ""))
+		.on("mouseout", fade(1, vis, "none"));
 	//alert(nodes);
 	//alert(arr[i].min_spacing);
 	//function(d, i) { return d.min_spacing; })
-	
+
+/*	
 var text = vis.selectAll("text").
   data(nodes).
   enter().
@@ -185,7 +186,7 @@ var text = vis.selectAll("text").
   attr("text-anchor", "middle").
   text(function(d,i) { return d.name ;}).
   attr("fill", "black");
-
+*/
 	vis.style("opacity", 1e-6)
 	  .transition()
 		.duration(1000)
@@ -215,10 +216,11 @@ var text = vis.selectAll("text").
 		  .attr("cy", function(d) { return d.y; })
 		  .style("fill", function(d, i) { return calcColor(d.health); })
 		  .style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); });
-		  
+	/*	  
 	  text
 	   .attr("x", function(d, i){ return d.x;})
 	   .attr("y", function(d, i){ return d.y;});
+	*/
 	});
 	
 	// Resolve collisions between nodes.
@@ -267,15 +269,13 @@ var text = vis.selectAll("text").
 function foGraCircle(arr)
 {
 	///alert(arr);
-	var w = 1450,
-		//d3.select("#botright").style("width").slice(0,-2)*.93,
-		h = 1450,
-		//d3.select("#botright").style("height").slice(0,-2)-90,
+	var w = d3.select("#botright").style("width").slice(0,-2)*.93,
+		h = d3.select("#botright").style("height").slice(0,-2)-90,
 		fill = d3.scale.category10(),
 		nodes = arr.map(Object);
 		nodes.forEach(function(o, i) {
-			o.y = (h/2)+(650*(Math.sin((2*3.14/59)*(i+.5))));
-			o.x = (w/2)+(650*(Math.cos((2*3.14/59)*(i+.5))));
+			o.y = (h/2)+(150*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = (w/2)+(150*(Math.cos((2*3.14/59)*(i+.5))));
 		});
 		links = new Array();
 	//alert(fill);
@@ -353,15 +353,18 @@ function foGraCircle(arr)
 		//d.x=250+(150*(Math.cos((2*3.14/59)*(i+.5))));
 		.attr("cy", function(d, i) { return d.y; })
 		//d.y=200+(150*(Math.sin((2*3.14/59)*(i+.5)))); 
-		.attr("r", 34)
+		.attr("r", 8)
 		.style("fill", function(d, i) { return calcColor(d.health); })
 		.style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); })
 		.style("stroke-width", 1.5)
-		.call(force.drag);
+		.call(force.drag)
+		.on("mouseover", fade(.1, vis, ""))
+		.on("mouseout", fade(1, vis, "none"));
 	//alert(nodes);
 	//alert(arr[i].min_spacing);
 	//function(d, i) { return d.min_spacing; })
 	
+	/*
 	var text = vis.selectAll("text").
 		  data(nodes).
 		  enter().
@@ -373,7 +376,7 @@ function foGraCircle(arr)
 		  attr("text-anchor", "middle").
 		  text(function(d,i) { return d.name ;}).
 		  attr("fill", "black");
-
+	*/
 
 	vis.style("opacity", 1e-6)
 	  .transition()
@@ -389,3 +392,30 @@ function foGraCircle(arr)
 	  force.resume();
 	});
 }
+
+function fade(opacity, vis) {
+        return function(d, i) {
+			//alert(d.id);
+			vis.selectAll("circle").style("opacity", //opacity
+			function(o) {
+				if(o.id == d.id)
+				{
+					return 1;
+				}
+				//they say that debugging requeres more creativity than programing and so you can easily program something you can not debugging
+				//which is to say fuck you, me!!
+				//take the companions and antagonists plants for the o object make them into one array of numbers by removeing ", " and check if the selected node is in the array, this sets the opacity
+                thisOpacity = (o.companions.split(", ").concat(o.antagonists.split(", ")).indexOf(d.id))>-1 ? 1 : opacity;
+                this.setAttribute('opacity', thisOpacity);
+                return thisOpacity;
+            }
+			);
+
+            vis.selectAll("line").style("opacity", //opacity
+			function(o) {
+				//alert(o.source.id);
+                return o.source.id === d.id || o.target.id === d.id ? 1 : opacity;
+            }
+			);
+        };
+    }
