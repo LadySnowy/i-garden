@@ -174,19 +174,21 @@ function foGra(arr)
 	//alert(arr[i].min_spacing);
 	//function(d, i) { return d.min_spacing; })
 
-/*	
-var text = vis.selectAll("text").
-  data(nodes).
-  enter().
-  append("svg:text").
-  attr("x", function(datum, index) { return datum.x; }).
-  attr("y", function(datum) { return datum.y; }).
-  attr("dx", 1).
-  attr("dy", 5).
-  attr("text-anchor", "middle").
-  text(function(d,i) { return d.name ;}).
-  attr("fill", "black");
-*/
+	var text = vis.selectAll("text").
+		  data(nodes).
+		  enter().
+		  append("svg:text").
+		  //attr("name", function(datum, index) { return datum.id; }).
+		  attr("x", function(datum, index) { return datum.x; }).
+		  attr("y", function(datum) { return datum.y; }).
+		  attr("dx", 1).
+		  attr("dy", 5).
+		  style("font-size", "18 px").
+          style("fill", "#5C5C5C").
+          style("pointer-events", 'none').
+		  text(function(d,i) { return d.name ;}).
+		  style("display", "none");
+		  
 	vis.style("opacity", 1e-6)
 	  .transition()
 		.duration(1000)
@@ -360,23 +362,37 @@ function foGraCircle(arr)
 		.call(force.drag)
 		.on("mouseover", fade(.1, vis, ""))
 		.on("mouseout", fade(1, vis, "none"));
+		/*
+		vis.append("svg:text")
+			.attr("class", r)
+            .attr("x", d.x+5)
+            .attr("y", d.y+5)
+            .style("font-size", "18 px")
+            .style("fill", "#5C5C5C")
+            .style("pointer-events", 'none')
+            .text(function() { return d.name;})
+            .style("display", "none")
+			*/
 	//alert(nodes);
 	//alert(arr[i].min_spacing);
 	//function(d, i) { return d.min_spacing; })
 	
-	/*
+
 	var text = vis.selectAll("text").
 		  data(nodes).
 		  enter().
 		  append("svg:text").
+		  //attr("name", function(datum, index) { return datum.id; }).
 		  attr("x", function(datum, index) { return datum.x; }).
 		  attr("y", function(datum) { return datum.y; }).
 		  attr("dx", 1).
 		  attr("dy", 5).
-		  attr("text-anchor", "middle").
+		  style("font-size", "18 px").
+          style("fill", "#5C5C5C").
+          style("pointer-events", 'none').
 		  text(function(d,i) { return d.name ;}).
-		  attr("fill", "black");
-	*/
+		  style("display", "none");
+
 
 	vis.style("opacity", 1e-6)
 	  .transition()
@@ -393,23 +409,43 @@ function foGraCircle(arr)
 	});
 }
 
-function fade(opacity, vis) {
+function fade(opacity, vis, display) {
         return function(d, i) {
 			//alert(d.id);
+			//make link list
+			link = d.companions.split(", ").concat(d.antagonists.split(", ")).concat(d.id);
+			//alert(link);
+			
 			vis.selectAll("circle").style("opacity", //opacity
 			function(o) {
-				if(o.id == d.id)
-				{
-					return 1;
-				}
+				//if(o.id == d.id)
+				//{
+				//	vis.selectAll("text").style("display", function(o){
+				//		if(o.id==d.id)
+				//		{
+				//			//alert(o.id);
+				//			return display;
+				//		}
+				//		return "none";
+				//	});
+				//	return 1;
+				//}
 				//they say that debugging requeres more creativity than programing and so you can easily program something you can not debugging
 				//which is to say fuck you, me!!
 				//take the companions and antagonists plants for the o object make them into one array of numbers by removeing ", " and check if the selected node is in the array, this sets the opacity
-                thisOpacity = (o.companions.split(", ").concat(o.antagonists.split(", ")).indexOf(d.id))>-1 ? 1 : opacity;
+                thisOpacity = (link.indexOf(o.id))>-1 ? 1 : opacity;
                 this.setAttribute('opacity', thisOpacity);
                 return thisOpacity;
-            }
-			);
+            });
+			vis.selectAll("text").style("display", function(o){
+						if((link.indexOf(o.id))>-1)
+						{
+							//alert(o.id);
+							return display;
+						}
+							return "none";
+						});						
+			
 
             vis.selectAll("line").style("opacity", //opacity
 			function(o) {
