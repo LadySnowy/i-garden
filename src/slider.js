@@ -2,20 +2,25 @@ function makeSlider(arr,itemNum,units,min,max)
 {
 //create vegitable contanier div
 var div=document.createElement("div");
-div.id=arr[itemNum].name;
-div.style.backgroundColor=calcColor(arr[itemNum].health);	
+div.id=arr[itemNum].id;
+div.style.backgroundColor=calcColor(arr[itemNum].health);
+div.addEventListener('onmouseover',function () {
+	document.getElementByClass('thing').style.display = 'block';
+},false);
+
+//onmouseover="document.getElementByClass('thing').style.display = 'block';"
 
 //make paragraph for label
 var para=document.createElement("p");
 //make label
 var lab=document.createElement("label");
-lab.htmlFor="amount"+arr[itemNum].name;
+lab.htmlFor="amount"+arr[itemNum].id;
 var node1=document.createTextNode(arr[itemNum].name+" yield:");
 
 //make input
 var inp=document.createElement("input");
 inp.type="text";
-inp.id="amount"+arr[itemNum].name;
+inp.id="amount"+arr[itemNum].id;
 inp.style.border="0"; 
 inp.style.color="#f6931f";	
 inp.style.fontWeight="bold";
@@ -27,31 +32,29 @@ para.appendChild(inp);
 
 //make slider div
 var div1=document.createElement("div");
-div1.id="slider"+arr[itemNum].name;
+div1.id="slider"+arr[itemNum].id;
 
-//make paragraph for min max label
-var para2=document.createElement("p");
+//create site
+var plot=document.createElementNS("http://www.w3.org/2000/svg", "svg");
+plot.setAttribute("height", 30);
+plot.setAttribute("width", "100%");
 
-//make min label
-var lab2=document.createElement("label");
-//lab.htmlFor="amount"+arr[itemNum].name;
-var node1=document.createTextNode(min);
 
-var para3=document.createElement("p");
-para3.style.textAlign="right";
-//make max label
-var lab3=document.createElement("label");	
-var node2=document.createTextNode(max);
+var tx=document.createElementNS("http://www.w3.org/2000/svg", "text");
+tx.setAttribute("x", 0);
+tx.setAttribute("y", 30);
+tx.textContent = min;
 
-	
-lab2.appendChild(node1);
-lab3.appendChild(node2);
+var tx1=document.createElementNS("http://www.w3.org/2000/svg", "text");
+tx1.setAttribute("x", "90%");
+tx1.setAttribute("y", 30);
+tx1.setAttribute("style", "align:right;");
+tx1.textContent = max;
 
-para2.appendChild(lab2);
-para3.appendChild(lab3);
+plot.appendChild(tx);
+plot.appendChild(tx1);
 
-div1.appendChild(para2);
-div1.appendChild(para3);
+div1.appendChild(plot);  
 
 //add everything to the vegitable contanier div
 div.appendChild(para);
@@ -61,19 +64,19 @@ div.appendChild(div1);
 var element=document.getElementById("list");
 element.appendChild(div);
 
-$( "#slider"+arr[itemNum].name).slider({
+$( "#slider"+arr[itemNum].id).slider({
 		//range: true,
 		min: min,
 		max: max,
 		value: arr[itemNum].number,
 		slide: function( event, ui ) {	
 			arr[itemNum].number = ui.value;
-			$( "#amount"+arr[itemNum].name).val(arr[itemNum].number + " " + units);
+			$( "#amount"+arr[itemNum].id).val(arr[itemNum].number + " " + units);
 			redra();
 			//( ui.value + " " + units);
 		}
 	});
-	$( "#amount"+arr[itemNum].name).val( $( "#slider"+arr[itemNum].name).slider( "values", 0 ) + " " + units );
+	$( "#amount"+arr[itemNum].id).val( $( "#slider"+arr[itemNum].id).slider( "values", 0 ) + " " + units );
 }	
 
 function redra()
@@ -81,6 +84,9 @@ function redra()
 	calculateHealth();
 	//redrawGarden();
 	redrawList();
+	//alert(foGraCircle.var);
+	forceColor(vis);
+	forceColor(visc);
 }
 
 function drawList()
@@ -95,8 +101,8 @@ function drawList()
 	
 	for(x in window.list)
 		{
-		makeSlider(window.list, x, 'lbs', 0, 50);
 		//alert("Data: " + x);
+		makeSlider(window.list, x, 'lbs', 0, 50);
 		}
 }
 
@@ -250,29 +256,39 @@ para.appendChild(inp);
 var div1=document.createElement("div");
 div1.id="slider"+obj.name;
 
-//make paragraph for min max label
-var para2=document.createElement("p");
+//create text svg
+var plot=document.createElementNS("http://www.w3.org/2000/svg", "svg");
+plot.setAttribute("height", 30);
+plot.setAttribute("width", "100%");
 
-//make min label
-var lab2=document.createElement("label");
-//lab.htmlFor="amount"+obj.name;
-var node1=document.createTextNode(obj.min);
 
-var para3=document.createElement("p");
-para3.style.textAlign="right";
-//make max label
-var lab3=document.createElement("label");	
-var node2=document.createTextNode(obj.max);
+var tx=document.createElementNS("http://www.w3.org/2000/svg", "text");
+tx.setAttribute("x", 0);
+tx.setAttribute("y", 30);
+tx.textContent = obj.min;
 
-	
-lab2.appendChild(node1);
-lab3.appendChild(node2);
+var tx1=document.createElementNS("http://www.w3.org/2000/svg", "text");
+tx1.setAttribute("x", "90%");
+tx1.setAttribute("y", 30);
+tx1.setAttribute("style", "align:right;");
+tx1.textContent = obj.max;
 
-para2.appendChild(lab2);
-para3.appendChild(lab3);
+var rec1=document.createElementNS("http://www.w3.org/2000/svg", "rect");
+	rec1.setAttribute("class", "thing");
+	rec1.setAttribute("x", "45%");
+	rec1.setAttribute("y", 0);
+	rec1.setAttribute("width", 80);
+	rec1.setAttribute("height", 15);
+	rec1.setAttribute("display", "none");
+	rec1.style.fill = 'rgba(133, 189, 83, 0.33)';
 
-div1.appendChild(para2);
-div1.appendChild(para3);
+plot.appendChild(tx);
+plot.appendChild(tx1);
+plot.appendChild(rec1);
+
+div1.appendChild(plot);
+
+
 
 //add everything to the vegitable contanier div
 div.appendChild(para);
@@ -304,21 +320,22 @@ function calculateHealth()
 	//get the total amount of water from irragation and rain fall as number of days to get an inch
 	var water = 1/((window.site.rainfall/360)+(1/window.site.irragate.value));
 	var ph=window.site.ph.value;
+	var light=window.site.shade.value;
 	
 	//alert("Data: " + ph);
-	plantHealth(window.list, water, ph);
-	plantHealth(window.allList, water, ph);
+	plantHealth(window.list, water, ph, light);
+	plantHealth(window.allList, water, ph, light);
 
 }
 
-function plantHealth(arr, water, ph)
+function plantHealth(arr, water, ph, light)
 {
 	for(x in arr)
 	{
 	//set health to full
 	var health = 1;
 	
-	//get the plant ph
+	//get the plant water
 	j=parseInt(arr[x].water_how_often);
 	//alert(phmin + " " + phmax);
 	//get the the standard divation
@@ -347,6 +364,17 @@ function plantHealth(arr, water, ph)
 	//alert(phraw);
 	health=(health/phraw>1)?health:health/phraw;
 	//alert(health);
+	
+	//get the plant light
+	s=parseInt(arr[x].sunlight);
+	//alert(phmin + " " + phmax);
+	//get the the standard divation
+	lstd=s/4;
+	//get the differance from avarage
+	lraw=Math.abs((s-light)/lstd);
+	//alert(phraw);		
+	health = (health/lraw>1)?health:health/lraw;
+	//alert("Data: " + x +" "+ health);
 	
 	//save health to the array
 	arr[x].health=health;
