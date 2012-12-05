@@ -176,6 +176,10 @@ stroke: #DBDBDB;
 opacity: 1;
 }
 
+#tab_tab1 svg .hover text.name {
+opacity: 0;
+}
+
 #tab_tab1 svg .hover path {
 stroke: green;
 opacity: 1;
@@ -193,7 +197,7 @@ opacity: 1;
 
 #tab_tab1 svg .compath .name {
 fill: blue;
-opacity: 1;
+opacity: 0;
 }
 
 #tab_tab1 svg .antpath path {
@@ -203,5 +207,19 @@ opacity: 1;
 
 #tab_tab1 svg .antpath .name {
 fill: red;
+opacity: 0;
+}
+
+#tab_tab1 svg #nametext {
 opacity: 1;
+}
+
+#tab_tab1 svg #comtext {
+opacity: 1;
+fill: blue;
+}
+
+#tab_tab1 svg #anttext {
+opacity: 1;
+fill: red;
 }
