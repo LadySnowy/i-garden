@@ -186,6 +186,11 @@ stroke: blue;
 opacity: 1;
 }
 
+#tab_tab1 svg .userph {
+fill: orange;
+opacity: 1;
+}
+
 #tab_tab1 svg .compath .name {
 fill: blue;
 opacity: 1;
