@@ -94,6 +94,7 @@ function redra()
 	//alert(foGraCircle.var);
 	forceColor(vis);
 	forceColor(visc);
+	controlRedraw();
 }
 
 function drawList()
