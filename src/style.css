@@ -115,3 +115,78 @@
 	border:1px solid #e1e1e1;
 	width:93%;
 }
+
+
+
+
+/****** Tab 1**********/
+#tab_tab1 {
+width: 1000px;
+height: 500px;
+}
+
+
+#tab_tab1 svg path {
+
+stroke: lime;
+stroke-width: 3;
+fill: none;
+}
+
+#tab_tab1 svg text {
+fill: black;
+opacity: 0;
+}
+
+#tab_tab1 svg text.gridtext {
+fill: black;
+opacity: 1;
+}
+
+#tab_tab1 svg .name {
+opacity: 0;
+}
+
+#tab_tab1 svg circle {
+opacity: 0;
+}
+
+#tab_tab1 svg line.grids {
+stroke-dasharray: 5, 4, 7, 5;
+stroke: black; 
+stroke-width: 2;
+stroke-opacity: 0.3;
+}
+
+#tab_tab1 svg line.baseline {
+stroke: black; 
+stroke-width: 2;
+stroke-opacity: 0.3;
+}
+
+#tab_tab1 svg .gridcontrol {
+fill: black;
+}
+
+#tab_tab1 svg .unfocused {
+opacity: 0.3;
+}
+
+#tab_tab1 svg .hover circle, #tab_tab1 svg .hover text {
+opacity: 1;
+}
+
+#tab_tab1 svg .hover path {
+stroke: green;
+opacity: 1;
+}
+
+#tab_tab1 svg .compath path {
+stroke: red;
+opacity: 0.3;
+}
+
+#tab_tab1 svg .compath .name {
+fill: red;
+opacity: 1;
+}
