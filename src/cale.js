@@ -8,13 +8,6 @@ var padding = 20;
 
 //log(width);
 
-var data = [
-  {phase:1, early:new Date(2012, 1, 24), late:new Date(2012, 3, 9)},
-  {phase:2, early:new Date(2012, 2, 21), late:new Date(2012, 4, 1)},
-  {phase:3, early:new Date(2012, 3, 5), late:new Date(2012, 8, 17)},
-  {phase:4, early:new Date(2012, 8, 7), late:new Date(2012, 9, 17)},
-];
-
 //add svg to sitelist
 var dayLength = d3.select("#siteList").
   append("svg:svg").
@@ -53,34 +46,73 @@ lineGroup.append("svg:rect").
 {
 //draw the starting 
 lineGroup.append("svg:rect").
-  attr("x", x(data[0].early)).
+  attr("id", "CalCompStart").
+  attr("x", x(window.site.earlySeed)).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(data[0].late)-x(data[0].early)).
+  attr("width", x(window.site.lateSeed)-x(window.site.earlySeed)).
   attr("fill", "rgba(171, 96, 107, 0.33)");
 //draw the harding
 lineGroup.append("svg:rect").
-  attr("x", x(data[1].early)).
+  attr("id", "CalCompTrans").
+  attr("x", x(window.site.earlyHarden)).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(data[1].late)-x(data[1].early)).
+  attr("width", x(window.site.lateHarden)-x(window.site.earlyHarden)).
   attr("fill", "rgba(143, 126, 233, 0.33)");
-}
 //draw the transplanting
 lineGroup.append("svg:rect").
-  attr("x", x(data[2].early)).
+  attr("id", "CalCompGrow").
+  attr("x", x(window.site.earlyPlant)).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(data[2].late)-x(data[2].early)).
+  attr("width", x(window.site.latePlant)-x(window.site.earlyPlant)).
   attr("fill", "rgba(133, 189, 83, 0.33)");
 //draw the Harvest
 lineGroup.append("svg:rect").
-  attr("x", x(data[3].early)).
+  attr("id", "CalCompHarv").
+  attr("x", x(window.site.harvestEarly)).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(data[3].late)-x(data[3].early)).
+  attr("width", x(window.site.harvestLate)-x(window.site.harvestEarly)).
   attr("fill", "rgba(171, 176, 107, 0.55)");
- 
+} 
+
+//this is where I draw the data for a certaint plant
+{
+//draw the starting 
+lineGroup.append("svg:rect").
+  attr("id", "CalCompStart").
+  attr("x", x(window.site.earlySeed)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(window.site.lateSeed)-x(window.site.earlySeed)).
+  attr("fill", "rgba(171, 96, 107, 0.33)");
+//draw the harding
+lineGroup.append("svg:rect").
+  attr("id", "CalCompTrans").
+  attr("x", x(window.site.earlyHarden)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(window.site.lateHarden)-x(window.site.earlyHarden)).
+  attr("fill", "rgba(143, 126, 233, 0.33)");
+//draw the transplanting
+lineGroup.append("svg:rect").
+  attr("id", "CalCompGrow").
+  attr("x", x(window.site.earlyPlant)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(window.site.latePlant)-x(window.site.earlyPlant)).
+  attr("fill", "rgba(133, 189, 83, 0.33)");
+//draw the Harvest
+lineGroup.append("svg:rect").
+  attr("id", "CalCompHarv").
+  attr("x", x(window.site.harvestEarly)).
+  attr("y", 0).
+  attr("height", height).
+  attr("width", x(window.site.harvestLate)-x(window.site.harvestEarly)).
+  attr("fill", "rgba(171, 176, 107, 0.55)");
+}
  
 
 // create a group to hold the axis-related elements
