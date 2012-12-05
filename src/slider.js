@@ -457,10 +457,10 @@ function vegOver(id){
 	document.getElementById('SunshineRec').setAttribute("width", widthnum+"%");
 	
 	//modify the calender
-	document.getElementById('CalCompStart').setAttribute("opacity", ".4");
-	document.getElementById('CalCompTrans').setAttribute("opacity", ".4");
-	document.getElementById('CalCompGrow').setAttribute("opacity", ".4");
-	document.getElementById('CalCompHarv').setAttribute("opacity", ".4");	
+	document.getElementById('CalCompStart').setAttribute("opacity", ".1");
+	document.getElementById('CalCompTrans').setAttribute("opacity", ".1");
+	document.getElementById('CalCompGrow').setAttribute("opacity", ".1");
+	document.getElementById('CalCompHarv').setAttribute("opacity", ".1");	
 }
 
 function vegOut(id){
