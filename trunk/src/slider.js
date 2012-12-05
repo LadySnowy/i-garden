@@ -396,6 +396,9 @@ function log(msg) {
 
 function vegOver(id){
 	//alert(id);
+	//alert(window.allList[id-1].id);
+	id=id-1;
+	//alert(window.allList[id].id);
 	
 	//get the plant ph
 	var y=window.allList[id].soil_ph;
@@ -436,11 +439,39 @@ function vegOver(id){
 	document.getElementById('IrrigationRec').setAttribute("x", xnum+"%");
 	document.getElementById('IrrigationRec').setAttribute("width", widthnum+"%");
 	
+	//get the plant light
+	y=parseFloat(window.allList[id].sunlight);
+	//alert(y);
+	
+	//get the max and min value
+	var shadeScaleMin = window.site.shade.min;
+	var shadeScaleMax = window.site.shade.max;	
+	//alert((phmin-phScaleMin)/(phScaleMax-phScaleMin));
+	var xnum = ((y-shadeScaleMin)/(shadeScaleMax-shadeScaleMin)*100)-2.5;
+	var widthnum = 5;
+	
+	//alert(xnum);	
+	//display the light range
+	document.getElementById('SunshineRec').setAttribute("display", "block");
+	document.getElementById('SunshineRec').setAttribute("x", xnum+"%");
+	document.getElementById('SunshineRec').setAttribute("width", widthnum+"%");
+	
+	//modify the calender
+	document.getElementById('CalCompStart').setAttribute("opacity", ".4");
+	document.getElementById('CalCompTrans').setAttribute("opacity", ".4");
+	document.getElementById('CalCompGrow').setAttribute("opacity", ".4");
+	document.getElementById('CalCompHarv').setAttribute("opacity", ".4");	
 }
 
 function vegOut(id){
 	document.getElementById('PHRec').setAttribute("display", "none");
 	document.getElementById('IrrigationRec').setAttribute("display", "none");
+	document.getElementById('SunshineRec').setAttribute("display", "none");
+	
+	document.getElementById('CalCompStart').setAttribute("opacity", "1");
+	document.getElementById('CalCompTrans').setAttribute("opacity", "1");
+	document.getElementById('CalCompGrow').setAttribute("opacity", "1");
+	document.getElementById('CalCompHarv').setAttribute("opacity", "1");
 }
 
 function getRecipeInfo(callback)
