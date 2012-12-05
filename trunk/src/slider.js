@@ -4,9 +4,16 @@ function makeSlider(arr,itemNum,units,min,max)
 var div=document.createElement("div");
 div.id=arr[itemNum].id;
 div.style.backgroundColor=calcColor(arr[itemNum].health);
-div.addEventListener('onmouseover',function () {
-	document.getElementByClass('thing').style.display = 'block';
-},false);
+div.onmouseover=function()
+{
+	vegOver(arr[itemNum].id);
+}
+;
+div.onmouseout=function()
+{
+	vegOut(arr[itemNum].id);
+}
+;
 
 //onmouseover="document.getElementByClass('thing').style.display = 'block';"
 
@@ -274,7 +281,7 @@ tx1.setAttribute("style", "align:right;");
 tx1.textContent = obj.max;
 
 var rec1=document.createElementNS("http://www.w3.org/2000/svg", "rect");
-	rec1.setAttribute("class", "thing");
+	rec1.setAttribute("id", obj.name+"Rec");
 	rec1.setAttribute("x", "45%");
 	rec1.setAttribute("y", 0);
 	rec1.setAttribute("width", 80);
@@ -287,8 +294,6 @@ plot.appendChild(tx1);
 plot.appendChild(rec1);
 
 div1.appendChild(plot);
-
-
 
 //add everything to the vegitable contanier div
 div.appendChild(para);
@@ -318,7 +323,7 @@ function calculateHealth()
 {
 	//get site values
 	//get the total amount of water from irragation and rain fall as number of days to get an inch
-	var water = 1/((window.site.rainfall/360)+(1/window.site.irragate.value));
+	var water = ((window.site.rainfall*window.site.irragate.value)+(window.site.irragate.value+365))/(365*window.site.irragate.value);
 	var ph=window.site.ph.value;
 	var light=window.site.shade.value;
 	
@@ -386,6 +391,55 @@ function log(msg) {
     setTimeout(function() {
         throw new Error(msg);
     }, 0);
+}
+
+function vegOver(id){
+	//alert(id);
+	
+	//get the plant ph
+	var y=window.allList[id].soil_ph;
+	//alert(y +" "+ x);
+	//get the max and min value
+	var s = y.indexOf("-");
+	var phmin = parseFloat(y.slice(0, s));
+	var phmax = parseFloat(y.slice(s+1));
+	var phScaleMin = window.site.ph.min;
+	var phScaleMax = window.site.ph.max;	
+	//alert((phmin-phScaleMin)/(phScaleMax-phScaleMin));
+	var xnum = (phmin-phScaleMin)/(phScaleMax-phScaleMin)*100;
+	var widthnum = ((phmax-phScaleMin)/(phScaleMax-phScaleMin)*100)-xnum;
+	
+	//display the ph range
+	document.getElementById('PHRec').setAttribute("display", "block");
+	document.getElementById('PHRec').setAttribute("x", xnum+"%");
+	document.getElementById('PHRec').setAttribute("width", widthnum+"%");
+	
+	//get the plant water
+	y=parseFloat(window.allList[id].water_how_often);
+	//figure out how much comes from rain fall
+	l=1/(window.site.rainfall/365);
+	//water = 1/((window.site.rainfall/365)+(1/window.site.irragate.value));
+	//alert(l);
+	
+	//alert(y +" "+ x);
+	//get the max and min value
+	var waterScaleMin = window.site.irragate.min;
+	var waterScaleMax = window.site.irragate.max;	
+	//alert((phmin-phScaleMin)/(phScaleMax-phScaleMin));
+	var xnum = (((l-y)/y*l)-waterScaleMin)/(waterScaleMax-waterScaleMin)*100;
+	var widthnum = 5;
+	
+	//alert(xnum);	
+	//display the water range
+	document.getElementById('IrrigationRec').setAttribute("display", "block");
+	document.getElementById('IrrigationRec').setAttribute("x", xnum+"%");
+	document.getElementById('IrrigationRec').setAttribute("width", widthnum+"%");
+	
+}
+
+function vegOut(id){
+	document.getElementById('PHRec').setAttribute("display", "none");
+	document.getElementById('IrrigationRec').setAttribute("display", "none");
 }
 
 function getRecipeInfo(callback)
