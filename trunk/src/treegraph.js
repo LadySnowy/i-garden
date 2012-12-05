@@ -1,3 +1,21 @@
+/**
+*   Global variables
+*
+*/				 
+
+var svgw = 700;
+var svgh = 500;   
+var svg;
+var soilTScale;
+var phScale;
+var dstart = 3;
+var attrs;
+var steps = 100;
+var translateX = 100;
+var translateY = 500;
+var radius = 3;
+var temp = 0;
+
 function createTreeGraph(original_data){
 	
 	/**
@@ -15,19 +33,9 @@ function createTreeGraph(original_data){
 	};
 	
 	
-	/**
-		*   Global variables
-		*
-		*/				 
-		var steps = 100;
-		var svgw = 700;
-		var svgh = 500;   
-		var svg = d3.select("div#tab_tab1").append("svg");
+		svg = d3.select("div#tab_tab1").append("svg");
 		
-		var translateX = 100;
-	   var translateY = 500;
-	   var radius = 3;
-	   var temp = 0;
+		
 	   
 	   
 	   
@@ -39,7 +47,7 @@ function createTreeGraph(original_data){
 	   var data = clone(original_data);
 	   
 	   
-	   var attrs = new Array();
+	   attrs = new Array();
 	   attrs[0] = "name";
 	   attrs[1] = "companions";
 	   attrs[2] = "antagonists";
@@ -63,10 +71,10 @@ function createTreeGraph(original_data){
 	   display[8] = "Min Spacing for Plants (inches)"
 	   display[9] = "Pounds Yield per Plant"
 	   
-	   var dstart = 3;
 	   
 	   
-	   var soilTScale = d3.scale.linear()
+	   
+	   soilTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[4]].indexOf("-");
 						 return data[attrs[4]].substring(0, tempi);
@@ -107,7 +115,7 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 						 
-		var phScale = d3.scale.linear()
+		phScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[3]].indexOf("-");
 						 return data[attrs[3]].substring(0, tempi);})
@@ -306,6 +314,28 @@ function createTreeGraph(original_data){
 	  .append("path")
 	  .attr("d",function(d){return "m "+svgw/2+" "+ 250})
 	 
+	 
+	  /**
+	*   User control point
+	*
+	*/
+	//ph
+    svg.append("circle")
+		.attr("class","userph")
+		.attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		.attr("cx",function(d){return phScale(site.ph.value)})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="soil_ph"){
+				return 250 - steps * (j-dstart+1);
+				}
+		}
+		
+		})
+   		.attr("r",function(d){return radius * 2});
+	
 		
 	}
 	
@@ -420,6 +450,9 @@ function createTreeGraph(original_data){
    		.text(function(d){return d[attrs[0]]})
   
   
+    
+	
+	
   }
   
   function moveup(){
@@ -436,6 +469,7 @@ function createTreeGraph(original_data){
     display[id] = display[nextid];
     display[nextid] = tempstring;
 	transform();
+	controlRedraw();
 	}
   }
   
@@ -453,8 +487,33 @@ function createTreeGraph(original_data){
     display[id] = display[previd];
     display[previd] = tempstring;
 	transform();
+	controlRedraw();
 	}
   }
   
+}
+
+
+function controlRedraw(){
+		
+        svg = d3.select("div#tab_tab1 svg");
+		svg.select(".userph").transition()
+		.attr("cx",function(d){
+		var tempvar = phScale(site.ph.value);
+		if(tempvar <= 0)
+			tempvar = 0;
+		if(tempvar >= svgw)
+			tempvar = svgw;
+		return tempvar;})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="soil_ph")
+				return 250 - steps * (j-dstart+1);
+		}
+		})
+   		.attr("r",function(d){return radius * 2});
+
 }
 
