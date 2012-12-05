@@ -28,6 +28,10 @@ fill: black;
 opacity: 1;
 }
 
+svg .name {
+opacity: 0;
+}
+
 svg circle {
 opacity: 0;
 }
@@ -43,4 +47,52 @@ svg line.baseline {
 stroke: black; 
 stroke-width: 2;
 stroke-opacity: 0.3;
+}
+
+svg .gridcontrol {
+fill: black;
+}
+/*
+svg .focusedcircle, svg .focusedtext {
+opacity: 1;
+}
+
+svg .focusedpath {
+stroke: green;
+opacity: 1;
+}
+
+svg .compath {
+stroke: red;
+opacity: 0.3;
+}
+
+svg .comtext {
+fill: red;
+opacity: 1;
+}
+*/
+
+
+svg .unfocused {
+opacity: 0.3;
+}
+
+svg .hover circle, svg .hover text {
+opacity: 1;
+}
+
+svg .hover path {
+stroke: green;
+opacity: 1;
+}
+
+svg .compath path {
+stroke: red;
+opacity: 0.3;
+}
+
+svg .compath .name {
+fill: red;
+opacity: 1;
 }
