@@ -70,6 +70,7 @@ function getPlantInfo(callback, arr, callback1, arr1)
 		//alert(window.allList);
 		callback(arr);
 		callback1(arr1);
+		callback1(createTreeGraph(allList));
 	});
 	//alert(window.allList);
 }
