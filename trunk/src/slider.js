@@ -134,20 +134,24 @@ function addPlant(id)
 			//creates an object to hold formated values
 			var m = new Object();
 			//handles the values
-			for(var x = 1; x < rows[i].length-1; x++)
+			for(var x = 1; x < rows[i].length; x++)
 			{
+				//get first value
+				//alert(x +" "+ i +" "+ rows[i].length);
 				if(x==1)
 				{
 					var j=rows[i][x].lastIndexOf(",");
 					var value = rows[i][x].slice(0,j);
 					var id = rows[i][x-1].slice(1);
-					//alert("Data: " + id + " " +value);
-				}else if(x==(rows[i].length-1))
+					//alert("first Data: " + id + " " +value);
+				//get last value
+				}else if(x==((rows[i].length)-1))
 				{
 					var value = rows[i][x];
 					var c=rows[i][x-1].lastIndexOf(",");
 					var id = rows[i][x-1].slice(c+2);
-					alert("Data: " + id + " " +value);
+					//alert("last Data: " + id + " " +value);
+				//get middle value
 				}else{				
 					//removes the field name
 					var j=rows[i][x].lastIndexOf(",");
@@ -211,7 +215,7 @@ function getPlants(){
 		}
 		//rows is a 2D array containg the id and name of all the plants in the database
 		//you need to place a call out to the function that uses this
-		alert("Data: " + rows[1][1]);
+		//alert("Data: " + rows[1][1]);
 	});
 }
 
@@ -327,7 +331,7 @@ function plantHealth(arr, water, ph)
 	
 	//get the plant ph
 	y=arr[x].soil_ph;
-	//alert(y);
+	//alert(y +" "+ x);
 	//get the max and min value
 	s = y.indexOf("-");
 	var phmin = parseFloat(y.slice(0, s));
