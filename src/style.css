@@ -128,7 +128,7 @@ height: 500px;
 
 #tab_tab1 svg path {
 
-stroke: lime;
+stroke: green;
 stroke-width: 3;
 fill: none;
 }
@@ -168,8 +168,8 @@ stroke-opacity: 0.3;
 fill: black;
 }
 
-#tab_tab1 svg .unfocused {
-opacity: 0.3;
+#tab_tab1 svg .unfocused path {
+stroke: #DBDBDB;
 }
 
 #tab_tab1 svg .hover circle, #tab_tab1 svg .hover text {
@@ -182,11 +182,21 @@ opacity: 1;
 }
 
 #tab_tab1 svg .compath path {
-stroke: red;
-opacity: 0.3;
+stroke: blue;
+opacity: 1;
 }
 
 #tab_tab1 svg .compath .name {
+fill: blue;
+opacity: 1;
+}
+
+#tab_tab1 svg .antpath path {
+stroke: red;
+opacity: 1;
+}
+
+#tab_tab1 svg .antpath .name {
 fill: red;
 opacity: 1;
 }
