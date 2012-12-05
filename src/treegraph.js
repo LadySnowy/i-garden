@@ -41,24 +41,26 @@ function createTreeGraph(original_data){
 	   
 	   var attrs = new Array();
 	   attrs[0] = "name";
-	   attrs[1] = "soil_temp";
-	   attrs[2] = "soil_temp_germ";
+	   attrs[1] = "companions";
+	   attrs[2] = "antagonists";
 	   attrs[3] = "soil_ph";
-	   //attrs[4] = "Air Temperature (F)";
+	   attrs[4] = "soil_temp";
+	   attrs[5] = "soil_temp_germ";
 	   
+	   var dstart = 3;
 	   
 	   
 	   var soilTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
-						 var tempi = data[attrs[1]].indexOf("-");
-						 return data[attrs[1]].substring(0, tempi);
+						 var tempi = data[attrs[4]].indexOf("-");
+						 return data[attrs[4]].substring(0, tempi);
 						 
 						 }).filter(function(val) {
 							return val != 0 
 						}))
 						 , Math.max.apply(Math,data.map(function(data){
-						 var tempi = data[attrs[1]].indexOf("-");
-						 return data[attrs[1]].substring(tempi + 1, data[attrs[1]].length);
+						 var tempi = data[attrs[4]].indexOf("-");
+						 return data[attrs[4]].substring(tempi + 1, data[attrs[4]].length);
 						 
 						 }).filter(function(val) {
 							return val != 0
@@ -67,14 +69,14 @@ function createTreeGraph(original_data){
 						 
 	   var soilGTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
-						 var tempi = data[attrs[2]].indexOf("-");
-						 return data[attrs[2]].substring(0, tempi);})
+						 var tempi = data[attrs[5]].indexOf("-");
+						 return data[attrs[5]].substring(0, tempi);})
 						 .filter(function(val) {
 							return val != 0
 						}))
 						 , Math.max.apply(Math,data.map(function(data,i){
-						 var tempi = data[attrs[2]].indexOf("-");
-						 return data[attrs[2]].substring(tempi + 1, data[attrs[2]].length);})
+						 var tempi = data[attrs[5]].indexOf("-");
+						 return data[attrs[5]].substring(tempi + 1, data[attrs[5]].length);})
 						 .filter(function(val) {
 							return val != 0
 						}))])
@@ -96,20 +98,20 @@ function createTreeGraph(original_data){
 			
 		
 		for(var i = 0; i < data.length; i++){
-		var tempi = data[i][attrs[1]].indexOf("-");
-		var avg = (parseInt(data[i][attrs[1]].substring(0, tempi)) + parseInt(data[i][attrs[1]].substring(tempi + 1, data[i][attrs[1]].length)))/2;
+		var tempi = data[i][attrs[4]].indexOf("-");
+		var avg = (parseInt(data[i][attrs[4]].substring(0, tempi)) + parseInt(data[i][attrs[4]].substring(tempi + 1, data[i][attrs[4]].length)))/2;
 		if(avg==0)
-			data[i][attrs[1]] = -50;
+			data[i][attrs[4]] = -50;
 		else
-			data[i][attrs[1]] = soilTScale(avg);
+			data[i][attrs[4]] = soilTScale(avg);
 		
-		tempi = data[i][attrs[2]].indexOf("-");
-		avg = (parseInt(data[i][attrs[2]].substring(0, tempi)) + parseInt(data[i][attrs[2]].substring(tempi + 1, data[i][attrs[2]].length)))/2;
+		tempi = data[i][attrs[5]].indexOf("-");
+		avg = (parseInt(data[i][attrs[5]].substring(0, tempi)) + parseInt(data[i][attrs[5]].substring(tempi + 1, data[i][attrs[5]].length)))/2;
 		
 		if(avg==0)
-			data[i][attrs[2]] = -50;
+			data[i][attrs[5]] = -50;
 		else
-			data[i][attrs[2]] = soilGTScale(avg);
+			data[i][attrs[5]] = soilGTScale(avg);
 		
 		tempi = data[i][attrs[3]].indexOf("-");
 		avg = (parseInt(data[i][attrs[3]].substring(0, tempi)) + parseInt(data[i][attrs[3]].substring(tempi + 1, data[i][attrs[3]].length)))/2;
@@ -136,7 +138,7 @@ function createTreeGraph(original_data){
 	   g=svg.selectAll("g").data(data).enter()
 	  .append("g")
 	  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
-	  .attr("id",function(d){return d.name;})
+	  .attr("id",function(d){return "i" + d.id;})
 	  /**
 		*   Mouse events
 		*
@@ -149,7 +151,19 @@ function createTreeGraph(original_data){
 		//Change attributes of hover
 		ag.attr("class","hover")
 		//Change attributes of companions plants
-		//d3.select("g#"+d.com).attr("class","compath")
+		if(d.companions != null){
+			var coms = d.companions.split(', ');
+			for(var j = 0; j< coms.length; j++){
+				svg.select("g#i"+coms[j]).attr("class","compath")
+			}
+		}
+		//Change attributes of antagonists plants
+		if(d.antagonists != null){
+			var ants = d.antagonists.split(', ');
+			for(var j = 0; j< ants.length; j++){
+				svg.select("g#i"+ants[j]).attr("class","antpath")
+			}
+		}
 		})
 		.on("mouseout", function(d) {
 		//Reset
@@ -196,7 +210,7 @@ function createTreeGraph(original_data){
 		*   Draw initial background grids' text 
 		*
 		*/
-		for(var i = 1; i<attrs.length; i++){
+		for(var i = dstart; i<attrs.length; i++){
 		svg.append("text")
 			.attr("class","gridtext")
 			.attr("x",0)
@@ -210,7 +224,7 @@ function createTreeGraph(original_data){
 		*   Draw initial grids' text arrangement box 
 		*
 		*/
-		for(var i = 1; i<attrs.length; i++){
+		for(var i = dstart; i<attrs.length; i++){
 		svg.append("image")
 			.attr("class","gridcontrol")
 			.attr("x",0)
@@ -265,12 +279,12 @@ function createTreeGraph(original_data){
 	*
 	*/
 	svg.selectAll(".gridtext").remove();
-	for(var i = 1; i<attrs.length; i++){
+	for(var i = dstart; i<attrs.length; i++){
 	svg.append("text")
 		.attr("class","gridtext")
 		.attr("id",i)
    		.attr("x",translateX+svgw+50)
-   		.attr("y",translateY+250 - steps * i)
+   		.attr("y",translateY+250 - steps * (i-dstart+1))
 		.text(attrs[i])
 		
 	}
@@ -281,12 +295,12 @@ function createTreeGraph(original_data){
 	*
 	*/
 	svg.selectAll(".gridcontrol").remove();
-	for(var i = 1; i<attrs.length; i++){
+	for(var i = dstart; i<attrs.length; i++){
 	svg.append("image")
 		.attr("class","gridcontrol")
 		.attr("id",i)
 		.attr("x",translateX+svgw+50)
-		.attr("y",translateY+250 - steps * i - 30)
+		.attr("y",translateY+250 - steps * (i-dstart+1) - 30)
 		.attr("width",16)
 		.attr("height",16)
 		.attr("xlink:href","images/up.png")
@@ -296,7 +310,7 @@ function createTreeGraph(original_data){
 		.attr("class","gridcontrol")
 		.attr("id",i)
 		.attr("x",translateX+svgw+50)
-		.attr("y",translateY+250 - steps * i + 5)
+		.attr("y",translateY+250 - steps * (i-dstart+1) + 5)
 		.attr("width",16)
 		.attr("height",16)
 		.attr("xlink:href","images/down.png")
@@ -310,7 +324,7 @@ function createTreeGraph(original_data){
 	*/
    g
   .select("path").transition().duration(1000)
-  .attr("d",function(d){return "m "+svgw/2+" "+ 250 +" l " + (d[attrs[1]]-svgw/2) + " -" + steps + " l " + (d[attrs[2]]-d[attrs[1]]) + " -" + steps + " l " + (d[attrs[3]]-d[attrs[2]]) + " -" + steps })
+  .attr("d",function(d){return "m "+svgw/2+" "+ 250 +" l " + (d[attrs[dstart]]-svgw/2) + " -" + steps + " l " + (d[attrs[dstart+1]]-d[attrs[dstart]]) + " -" + steps + " l " + (d[attrs[dstart+2]]-d[attrs[dstart+1]]) + " -" + steps })
   
   
   
@@ -322,15 +336,15 @@ function createTreeGraph(original_data){
    g.selectAll("circle").remove();
    g
    .append("circle")
-   		.attr("cx",function(d){return d[attrs[1]]})
+   		.attr("cx",function(d){return d[attrs[dstart]]})
    		.attr("cy",function(d){return 250 - steps})
    		.attr("r",function(d){return radius})
    g.append("circle")
-   		.attr("cx",function(d){return d[attrs[2]]})
+   		.attr("cx",function(d){return d[attrs[dstart+1]]})
    		.attr("cy",function(d){return 250 - steps * 2})
    		.attr("r",function(d){return radius});
    g.append("circle")
-   		.attr("cx",function(d){return d[attrs[3]]})
+   		.attr("cx",function(d){return d[attrs[dstart+2]]})
    		.attr("cy",function(d){return 250 - steps * 3})
    		.attr("r",function(d){return radius});
    	
@@ -341,31 +355,17 @@ function createTreeGraph(original_data){
 	*/
    g.selectAll("text").remove();
 
-   for(var j=1;j<attrs.length;j++)
+   for(var j=dstart;j<attrs.length;j++)
    {   
    g.append("text")
    		.attr("x",function(d){return d[attrs[j]] + 5})
-   		.attr("y",function(d){return 250 - steps * j - 5})
+   		.attr("y",function(d){return 250 - steps * (j-dstart+1) - 5})
    		.text(function(d,i){
 		var tempv = original_data[i][attrs[j]];
 		if(tempv == "0-0")
 		return "Unknown";
 		else
 		return tempv;})
-   
-   /*g
-   .append("text")
-   		.attr("x",function(d){return d[attrs[1]] + 5})
-   		.attr("y",function(d){return 250 - steps - 5})
-   		.text(function(d,i){return original_data[i][attrs[1]]})
-   g.append("text")
-   		.attr("x",function(d){return d[attrs[2]] + 5})
-   		.attr("y",function(d){return 250 - steps * 2 - 5})
-   		.text(function(d,i){return original_data[i][attrs[2]]});
-   g.append("text")
-   		.attr("x",function(d){return d[attrs[3]] + 5})
-   		.attr("y",function(d){return 250 - steps * 3 - 5})
-   		.text(function(d,i){return original_data[i][attrs[3]]});*/
 	}
    	
    	/**
@@ -374,7 +374,7 @@ function createTreeGraph(original_data){
 	*/
    g
    .append("text")
-   		.attr("x",function(d){return d[attrs[3]]})
+   		.attr("x",function(d){return d[attrs[attrs.length-1]]})
    		.attr("y",function(d){return 250 - steps * 3 - 25})
    		.attr("class","name")
    		.text(function(d){return d[attrs[0]]})
@@ -400,7 +400,7 @@ function createTreeGraph(original_data){
      this.parentNode.appendChild(this);
     var clickcontrol = d3.select(this);
 	
-	if(clickcontrol.attr("id") > 1){
+	if(clickcontrol.attr("id") > dstart){
 	var id = clickcontrol.attr("id");
 	var previd = parseInt(clickcontrol.attr("id")) - 1;
 	var tempstring = attrs[id];
