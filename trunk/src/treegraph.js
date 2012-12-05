@@ -4,13 +4,13 @@ function createTreeGraph(original_data){
 		* Method for copying objects
 		*
 		*/
-		Object.prototype.clone = function() {
-	  var newObj = (this instanceof Array) ? [] : {};
-	  for (i in this) {
+		function clone(o) {
+	  var newObj = (o instanceof Array) ? [] : {};
+	  for (i in o) {
 		if (i == 'clone') continue;
-		if (this[i] && typeof this[i] == "object") {
-		  newObj[i] = this[i].clone();
-		} else newObj[i] = this[i]
+		if (o[i] && typeof o[i] == "object") {
+		  newObj[i] = clone(o[i]);
+		} else newObj[i] = o[i]
 	  } return newObj;
 	};
 	
@@ -25,7 +25,7 @@ function createTreeGraph(original_data){
 		var svg = d3.select("div#tab_tab1").append("svg");
 		
 		var translateX = 100;
-	   var translateY = 200;
+	   var translateY = 300;
 	   var radius = 3;
 	   var temp = 0;
 	   
@@ -36,7 +36,7 @@ function createTreeGraph(original_data){
 		*
 		*/
 	   
-	   var data = original_data.clone();
+	   var data = clone(original_data);
 	   
 	   
 	   var attrs = new Array();
@@ -46,6 +46,18 @@ function createTreeGraph(original_data){
 	   attrs[3] = "soil_ph";
 	   attrs[4] = "soil_temp";
 	   attrs[5] = "soil_temp_germ";
+	   attrs[6] = "root_depth";
+	   attrs[7] = "air_temp";
+	   
+	   var display = new Array();
+	   display[0] = "name";
+	   display[1] = "companions";
+	   display[2] = "antagonists";
+	   display[3] = "Soil pH";
+	   display[4] = "Soil Temperature (F)";
+	   display[5] = "Soil Germination Temperature (F)";
+	   display[6] = "Root Depth"
+	   display[7] = "Air Temperature (F)"
 	   
 	   var dstart = 3;
 	   
@@ -62,9 +74,7 @@ function createTreeGraph(original_data){
 						 var tempi = data[attrs[4]].indexOf("-");
 						 return data[attrs[4]].substring(tempi + 1, data[attrs[4]].length);
 						 
-						 }).filter(function(val) {
-							return val != 0
-						}))])
+						 }))])
 						 .range([0, svgw]);
 						 
 	   var soilGTScale = d3.scale.linear()
@@ -77,30 +87,55 @@ function createTreeGraph(original_data){
 						 , Math.max.apply(Math,data.map(function(data,i){
 						 var tempi = data[attrs[5]].indexOf("-");
 						 return data[attrs[5]].substring(tempi + 1, data[attrs[5]].length);})
+						 )])
+						 .range([0, svgw]);
+						 
+		var airScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 var tempi = data[attrs[7]].indexOf("-");
+						 return data[attrs[7]].substring(0, tempi);})
 						 .filter(function(val) {
 							return val != 0
-						}))])
+						}))
+						 , Math.max.apply(Math,data.map(function(data,i){
+						 var tempi = data[attrs[7]].indexOf("-");
+						 return data[attrs[7]].substring(tempi + 1, data[attrs[7]].length);})
+						 )])
 						 .range([0, svgw]);
+						 
 		var phScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[3]].indexOf("-");
 						 return data[attrs[3]].substring(0, tempi);})
-						 .filter(function(val) {
-							return val != 0
+						 .filter(function() {
+							return data[attrs[3]] != "0-0"
 						}))
 						 , Math.max.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[3]].indexOf("-");
 						 return data[attrs[3]].substring(tempi + 1, data[attrs[3]].length);})
-						 .filter(function(val) {
-							return val != 0
-						}))])
+						 )])
 						 .range([0, svgw]);
+		
+		var rootScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 var tempi = data[attrs[6]].indexOf("-");
+						 return data[attrs[6]].substring(0, tempi);})
+						 .filter(function() {
+							return data[attrs[6]] != "0-0"
+						}))
+						 , Math.max.apply(Math,data.map(function(data){
+						 var tempi = data[attrs[6]].indexOf("-");
+						 return data[attrs[6]].substring(tempi + 1, data[attrs[6]].length);})
+						 )])
+						 .range([0, svgw]);
+		
+		
 			
 		
 		for(var i = 0; i < data.length; i++){
 		var tempi = data[i][attrs[4]].indexOf("-");
 		var avg = (parseInt(data[i][attrs[4]].substring(0, tempi)) + parseInt(data[i][attrs[4]].substring(tempi + 1, data[i][attrs[4]].length)))/2;
-		if(avg==0)
+		if(data[i][attrs[4]]=="0-0")
 			data[i][attrs[4]] = -50;
 		else
 			data[i][attrs[4]] = soilTScale(avg);
@@ -108,7 +143,7 @@ function createTreeGraph(original_data){
 		tempi = data[i][attrs[5]].indexOf("-");
 		avg = (parseInt(data[i][attrs[5]].substring(0, tempi)) + parseInt(data[i][attrs[5]].substring(tempi + 1, data[i][attrs[5]].length)))/2;
 		
-		if(avg==0)
+		if(data[i][attrs[5]]=="0-0")
 			data[i][attrs[5]] = -50;
 		else
 			data[i][attrs[5]] = soilGTScale(avg);
@@ -116,13 +151,32 @@ function createTreeGraph(original_data){
 		tempi = data[i][attrs[3]].indexOf("-");
 		avg = (parseInt(data[i][attrs[3]].substring(0, tempi)) + parseInt(data[i][attrs[3]].substring(tempi + 1, data[i][attrs[3]].length)))/2;
 		
-		if(avg==0)
+		if(data[i][attrs[3]]=="0-0")
 			data[i][attrs[3]] = -50;
 		else
 			data[i][attrs[3]] = phScale(avg);
+			
+		tempi = data[i][attrs[6]].indexOf("-");
+		avg = (parseInt(data[i][attrs[6]].substring(0, tempi)) + parseInt(data[i][attrs[6]].substring(tempi + 1, data[i][attrs[6]].length)))/2;
+		
+		if(data[i][attrs[6]]=="0-0")
+			data[i][attrs[6]] = -50;
+		else{
+			data[i][attrs[6]] = rootScale(avg);
+			}
+			
+		tempi = data[i][attrs[7]].indexOf("-");
+		avg = (parseInt(data[i][attrs[7]].substring(0, tempi)) + parseInt(data[i][attrs[7]].substring(tempi + 1, data[i][attrs[7]].length)))/2;
+		
+		if(data[i][attrs[7]]=="0-0")
+			data[i][attrs[7]] = -50;
+		else{
+			data[i][attrs[7]] = airScale(avg);
+			}
 		}
 	
 	var g;
+	
 	
 	initialize();
 	transform();
@@ -167,7 +221,7 @@ function createTreeGraph(original_data){
 		})
 		.on("mouseout", function(d) {
 		//Reset
-		svg.selectAll("g").attr("class","")
+		svg.selectAll("g").attr("class","").attr("render-order",0)
 		})
 	  
 	   /**
@@ -193,51 +247,13 @@ function createTreeGraph(original_data){
 			.attr("x2",translateX+svgw)
 			.attr("y2",translateY+250)
 			
-		for(var i = 1; i<4; i++){
+		for(var i = 1; i<attrs.length-dstart +1; i++){
 		svg.append("line")
 			.attr("class","grids")
 			.attr("x1",translateX)
 			.attr("y1",translateY+250 - steps * i)
 			.attr("x2",translateX+svgw)
 			.attr("y2",translateY+250 - steps * i)
-		}
-		
-		
-
-		
-		
-		/**
-		*   Draw initial background grids' text 
-		*
-		*/
-		for(var i = dstart; i<attrs.length; i++){
-		svg.append("text")
-			.attr("class","gridtext")
-			.attr("x",0)
-			.attr("y",0)
-			.text(attrs[i]);
-			
-		
-		}
-		
-		/**
-		*   Draw initial grids' text arrangement box 
-		*
-		*/
-		for(var i = dstart; i<attrs.length; i++){
-		svg.append("image")
-			.attr("class","gridcontrol")
-			.attr("x",0)
-			.attr("y",0)
-			.attr("width",10)
-			.attr("height",10);
-			
-		svg.append("image")
-			.attr("class","gridcontrol")
-			.attr("x",0)
-			.attr("y",0)
-			.attr("width",10)
-			.attr("height",10);
 		}
 		
 		/**
@@ -247,27 +263,7 @@ function createTreeGraph(original_data){
 	   g
 	  .append("path")
 	  .attr("d",function(d){return "m "+svgw/2+" "+ 250})
-	  
-	  /**
-		*   Initial dots creation
-		*
-		*/
-	   
-	   g
-	   .append("circle")
-			.attr("cx",function(d){return 0})
-			.attr("cy",function(d){return 0})
-			.attr("r",function(d){return radius})
-	   g.append("circle")
-			.attr("cx",function(d){return 0})
-			.attr("cy",function(d){return 0})
-			.attr("r",function(d){return radius});
-	   g.append("circle")
-			.attr("cx",function(d){return 0})
-			.attr("cy",function(d){return 0})
-			.attr("r",function(d){return radius});
-			
-		
+	 
 		
 	}
 	
@@ -285,7 +281,7 @@ function createTreeGraph(original_data){
 		.attr("id",i)
    		.attr("x",translateX+svgw+50)
    		.attr("y",translateY+250 - steps * (i-dstart+1))
-		.text(attrs[i])
+		.text(display[i])
 		
 	}
 	
@@ -324,7 +320,12 @@ function createTreeGraph(original_data){
 	*/
    g
   .select("path").transition().duration(1000)
-  .attr("d",function(d){return "m "+svgw/2+" "+ 250 +" l " + (d[attrs[dstart]]-svgw/2) + " -" + steps + " l " + (d[attrs[dstart+1]]-d[attrs[dstart]]) + " -" + steps + " l " + (d[attrs[dstart+2]]-d[attrs[dstart+1]]) + " -" + steps })
+  .attr("d",function(d){return "m "+svgw/2+" "+ 250 
+  +" l " + (d[attrs[dstart]]-svgw/2) + " -" + steps 
+  + " l " + (d[attrs[dstart+1]]-d[attrs[dstart]]) + " -" + steps 
+  + " l " + (d[attrs[dstart+2]]-d[attrs[dstart+1]]) + " -" + steps 
+  + " l " + (d[attrs[dstart+3]]-d[attrs[dstart+2]]) + " -" + steps
+  + " l " + (d[attrs[dstart+4]]-d[attrs[dstart+3]]) + " -" + steps  })
   
   
   
@@ -334,20 +335,13 @@ function createTreeGraph(original_data){
 	*/	 
    var radius = 3;
    g.selectAll("circle").remove();
-   g
-   .append("circle")
-   		.attr("cx",function(d){return d[attrs[dstart]]})
-   		.attr("cy",function(d){return 250 - steps})
-   		.attr("r",function(d){return radius})
+   for(var j=dstart;j<attrs.length;j++){
    g.append("circle")
-   		.attr("cx",function(d){return d[attrs[dstart+1]]})
-   		.attr("cy",function(d){return 250 - steps * 2})
+   		.attr("cx",function(d){return d[attrs[j]]})
+   		.attr("cy",function(d){return 250 - steps * (j-dstart+1)})
    		.attr("r",function(d){return radius});
-   g.append("circle")
-   		.attr("cx",function(d){return d[attrs[dstart+2]]})
-   		.attr("cy",function(d){return 250 - steps * 3})
-   		.attr("r",function(d){return radius});
-   	
+		
+   	}
    	
    	/**
 	*   Attribute values creation
@@ -375,7 +369,9 @@ function createTreeGraph(original_data){
    g
    .append("text")
    		.attr("x",function(d){return d[attrs[attrs.length-1]]})
-   		.attr("y",function(d){return 250 - steps * 3 - 25})
+   		.attr("y",function(d){
+		return 250 - steps * (attrs.length-dstart) - 25;
+		})
    		.attr("class","name")
    		.text(function(d){return d[attrs[0]]})
   
@@ -392,6 +388,9 @@ function createTreeGraph(original_data){
 	var tempstring = attrs[id];
     attrs[id] = attrs[nextid];
     attrs[nextid] = tempstring;
+	tempstring = display[id];
+    display[id] = display[nextid];
+    display[nextid] = tempstring;
 	transform();
 	}
   }
@@ -406,6 +405,9 @@ function createTreeGraph(original_data){
 	var tempstring = attrs[id];
     attrs[id] = attrs[previd];
     attrs[previd] = tempstring;
+	tempstring = display[id];
+    display[id] = display[previd];
+    display[previd] = tempstring;
 	transform();
 	}
   }
