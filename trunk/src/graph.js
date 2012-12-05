@@ -18,7 +18,7 @@ function getPlantInfo(callback, arr, callback1, arr1)
 						
 			//breaks apart the values
 			rows[i]=n.split("\":");
-			alert("Data: " + rows[i]);
+			//alert("Data: " + rows[i]);
 			
 			//creates an object to hold formated values
 			var m = new Object();
@@ -291,7 +291,7 @@ function foGraCircle(arr)
 	for(x in nodes)
 	{
 		//alert(nodes[x].companions);
-		alert(nodes[x].id +" " + nodes[x].companions);
+		//alert(nodes[x].id +" " + nodes[x].companions);
 		com = nodes[x].companions.split(", ");
 		
 		if(com.length > 1)
