@@ -419,6 +419,12 @@ function forceColor(vis){
 
 function fade(opacity, vis, display) {
         return function(d, i) {
+			if(display == "none")
+			{
+				vegOut();
+			}else{
+				vegOver(i);
+			}
 			//alert(d.id);
 			//make link list
 			link = d.companions.split(", ").concat(d.antagonists.split(", ")).concat(d.id);

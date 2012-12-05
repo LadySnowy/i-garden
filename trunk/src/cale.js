@@ -82,35 +82,35 @@ lineGroup.append("svg:rect").
 {
 //draw the starting 
 lineGroup.append("svg:rect").
-  attr("id", "CalCompStart").
-  attr("x", x(window.site.earlySeed)).
+  attr("id", "CalPlantStart").
+  attr("x", 95).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(window.site.lateSeed)-x(window.site.earlySeed)).
+  attr("width", 60).
   attr("fill", "rgba(171, 96, 107, 0.33)");
 //draw the harding
 lineGroup.append("svg:rect").
-  attr("id", "CalCompTrans").
-  attr("x", x(window.site.earlyHarden)).
+  attr("id", "CalPlantTrans").
+  attr("x", 120).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(window.site.lateHarden)-x(window.site.earlyHarden)).
+  attr("width", 70).
   attr("fill", "rgba(143, 126, 233, 0.33)");
 //draw the transplanting
 lineGroup.append("svg:rect").
-  attr("id", "CalCompGrow").
-  attr("x", x(window.site.earlyPlant)).
+  attr("id", "CalPlantGrow").
+  attr("x", 160).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(window.site.latePlant)-x(window.site.earlyPlant)).
+  attr("width", 250).
   attr("fill", "rgba(133, 189, 83, 0.33)");
 //draw the Harvest
 lineGroup.append("svg:rect").
-  attr("id", "CalCompHarv").
-  attr("x", x(window.site.harvestEarly)).
+  attr("id", "CalPlantHarv").
+  attr("x", 410).
   attr("y", 0).
   attr("height", height).
-  attr("width", x(window.site.harvestLate)-x(window.site.harvestEarly)).
+  attr("width", 60).
   attr("fill", "rgba(171, 176, 107, 0.55)");
 }
  
