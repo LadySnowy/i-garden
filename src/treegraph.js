@@ -25,7 +25,7 @@ function createTreeGraph(original_data){
 		var svg = d3.select("div#tab_tab1").append("svg");
 		
 		var translateX = 100;
-	   var translateY = 300;
+	   var translateY = 500;
 	   var radius = 3;
 	   var temp = 0;
 	   
@@ -48,6 +48,8 @@ function createTreeGraph(original_data){
 	   attrs[5] = "soil_temp_germ";
 	   attrs[6] = "root_depth";
 	   attrs[7] = "air_temp";
+	   attrs[8] = "min_spacing";
+	   attrs[9] = "yeild_plant";
 	   
 	   var display = new Array();
 	   display[0] = "name";
@@ -58,6 +60,8 @@ function createTreeGraph(original_data){
 	   display[5] = "Soil Germination Temperature (F)";
 	   display[6] = "Root Depth"
 	   display[7] = "Air Temperature (F)"
+	   display[8] = "Min Spacing for Plants (inches)"
+	   display[9] = "Pounds Yield per Plant"
 	   
 	   var dstart = 3;
 	   
@@ -129,6 +133,27 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 		
+		var spaceScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 return data[attrs[8]];})
+						 )
+						 , Math.max.apply(Math,data.map(function(data){
+						 return data[attrs[8]];})
+						 )])
+						 .range([0, svgw]);
+						 
+		var yieldScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 var tempi = data[attrs[9]].indexOf("-");
+						 return data[attrs[9]].substring(0, tempi);})
+						 .filter(function() {
+							return data[attrs[9]] != "0-0"
+						}))
+						 , Math.max.apply(Math,data.map(function(data){
+						 var tempi = data[attrs[9]].indexOf("-");
+						 return data[attrs[9]].substring(tempi + 1, data[attrs[9]].length);})
+						 )])
+						 .range([0, svgw]);
 		
 			
 		
@@ -173,7 +198,21 @@ function createTreeGraph(original_data){
 		else{
 			data[i][attrs[7]] = airScale(avg);
 			}
+			
+		data[i][attrs[8]] = spaceScale(data[i][attrs[8]]);
+		
+		tempi = data[i][attrs[9]].indexOf("-");
+		avg = (parseInt(data[i][attrs[9]].substring(0, tempi)) + parseInt(data[i][attrs[9]].substring(tempi + 1, data[i][attrs[9]].length)))/2;
+		
+		if(data[i][attrs[9]]=="0-0")
+			data[i][attrs[9]] = -50;
+		else{
+			data[i][attrs[9]] = yieldScale(avg);
+			}
 		}
+		
+		
+		
 	
 	var g;
 	
@@ -188,6 +227,17 @@ function createTreeGraph(original_data){
    
 
    function initialize(){   
+	   
+	   /**
+		*   Draw unknown area
+		*
+		*/
+	   svg.append("rect")
+			.attr("x",translateX - 80)
+			.attr("y",0)
+			.attr("fill","gray")
+			.attr("width",60)
+			.attr("height",svgh+translateY)
 	   
 	   g=svg.selectAll("g").data(data).enter()
 	  .append("g")
@@ -224,16 +274,8 @@ function createTreeGraph(original_data){
 		svg.selectAll("g").attr("class","").attr("render-order",0)
 		})
 	  
-	   /**
-		*   Draw unknown area
-		*
-		*/
-	   svg.append("rect")
-			.attr("x",translateX - 80)
-			.attr("y",0)
-			.attr("fill","gray")
-			.attr("width",60)
-			.attr("height",svgh)
+	   
+			
 	   
 	   
 	   /**
@@ -325,7 +367,9 @@ function createTreeGraph(original_data){
   + " l " + (d[attrs[dstart+1]]-d[attrs[dstart]]) + " -" + steps 
   + " l " + (d[attrs[dstart+2]]-d[attrs[dstart+1]]) + " -" + steps 
   + " l " + (d[attrs[dstart+3]]-d[attrs[dstart+2]]) + " -" + steps
-  + " l " + (d[attrs[dstart+4]]-d[attrs[dstart+3]]) + " -" + steps  })
+  + " l " + (d[attrs[dstart+4]]-d[attrs[dstart+3]]) + " -" + steps
+  + " l " + (d[attrs[dstart+5]]-d[attrs[dstart+4]]) + " -" + steps  
+  + " l " + (d[attrs[dstart+6]]-d[attrs[dstart+5]]) + " -" + steps })
   
   
   
