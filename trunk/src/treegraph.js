@@ -3,18 +3,19 @@
 *
 */				 
 
-var svgw = 700;
+var svgw = 500;
 var svgh = 500;   
 var svg;
 var soilTScale;
 var phScale;
 var dstart = 3;
 var attrs;
-var steps = 100;
+var steps = 70;
 var translateX = 100;
-var translateY = 600;
+var translateY = 400;
 var radius = 3;
 var temp = 0;
+var mode = "nonselect";
 
 function createTreeGraph(original_data){
 	
@@ -275,7 +276,8 @@ function createTreeGraph(original_data){
 		*   Mouse events
 		*
 		*/
-		.on("mouseover", function(d) {	
+		.on("mouseover", function(d) {
+		if(mode=="nonselect"){		
         this.parentNode.appendChild(this);
         var ag = d3.select(this);
 		
@@ -287,35 +289,56 @@ function createTreeGraph(original_data){
 		
 		var tempcomtext = "Companions: ";
 		//Change attributes of companions plants
-		if(d.companions != null){
+		
 			var coms = d.companions.split(', ');
 			for(var j = 0; j< coms.length; j++){
+				if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
 				svg.select("g#i"+coms[j]).attr("class","compath")
 				tempcomtext = tempcomtext + data[coms[j]].name + "; ";
+				}
 			}
-		}
+		
 		svg.select("#comtext")
 			.text(tempcomtext)
 		//Change attributes of antagonists plants
 		tempcomtext = "Antagonists: ";
-		if(d.antagonists != null){
+		
 			var ants = d.antagonists.split(', ');
 			for(var j = 0; j< ants.length; j++){
+			    if(typeof data[ants[j]] != "undefined" && data[ants[j]] != null){
 				svg.select("g#i"+ants[j]).attr("class","antpath")
 				tempcomtext = tempcomtext + data[ants[j]].name + "; ";
+				}
 			}
-		}
+		
 		svg.select("#anttext")
 			.text(tempcomtext)
-		})
+		}})
 		.on("mouseout", function(d) {
 		//Reset
+		if(mode=="nonselect"){
 		svg.selectAll("g").attr("class","").attr("render-order",0);
 		svg.select("#comtext")
 			.text("");
 		svg.select("#anttext")
 			.text("");
 		svg.select("#nametext").text("");
+		}
+		})
+		.on("mouseclick", function(d) {
+		if(mode=="nonselect"){
+			mode = "select";
+			this.parentNode.appendChild(this);
+			var ag = d3.select(this);
+			
+			//Change attributes of all vegetables
+			svg.selectAll("g").attr("class","unfocused");
+			//Change attributes of hover
+			ag.attr("class","selected");
+			}
+		else
+			mode="nonselect";
+		
 		})
 	  
 	   
