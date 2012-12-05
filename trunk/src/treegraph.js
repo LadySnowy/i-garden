@@ -12,7 +12,7 @@ var dstart = 3;
 var attrs;
 var steps = 100;
 var translateX = 100;
-var translateY = 500;
+var translateY = 600;
 var radius = 3;
 var temp = 0;
 
@@ -234,7 +234,27 @@ function createTreeGraph(original_data){
 	
    
 
-   function initialize(){   
+   function initialize(){  
+
+		/**
+		*   Show hovered plant
+		*
+		*/
+		svg.append("text")
+			.attr("x",100)
+			.attr("y",50)
+			.attr("id","nametext")
+			.text("")
+		svg.append("text")
+			.attr("x",100)
+			.attr("y",80)
+			.attr("id","comtext")
+			.text("")
+		svg.append("text")
+			.attr("x",100)
+			.attr("y",100)
+			.attr("id","anttext")
+			.text("")
 	   
 	   /**
 		*   Draw unknown area
@@ -258,28 +278,44 @@ function createTreeGraph(original_data){
 		.on("mouseover", function(d) {	
         this.parentNode.appendChild(this);
         var ag = d3.select(this);
+		
 		//Change attributes of all vegetables
-		svg.selectAll("g").attr("class","unfocused")
+		svg.selectAll("g").attr("class","unfocused");
 		//Change attributes of hover
-		ag.attr("class","hover")
+		ag.attr("class","hover");
+		svg.select("#nametext").text("Name: " + ag.select(".name").text());
+		
+		var tempcomtext = "Companions: ";
 		//Change attributes of companions plants
 		if(d.companions != null){
 			var coms = d.companions.split(', ');
 			for(var j = 0; j< coms.length; j++){
 				svg.select("g#i"+coms[j]).attr("class","compath")
+				tempcomtext = tempcomtext + data[coms[j]].name + "; ";
 			}
 		}
+		svg.select("#comtext")
+			.text(tempcomtext)
 		//Change attributes of antagonists plants
+		tempcomtext = "Antagonists: ";
 		if(d.antagonists != null){
 			var ants = d.antagonists.split(', ');
 			for(var j = 0; j< ants.length; j++){
 				svg.select("g#i"+ants[j]).attr("class","antpath")
+				tempcomtext = tempcomtext + data[ants[j]].name + "; ";
 			}
 		}
+		svg.select("#anttext")
+			.text(tempcomtext)
 		})
 		.on("mouseout", function(d) {
 		//Reset
-		svg.selectAll("g").attr("class","").attr("render-order",0)
+		svg.selectAll("g").attr("class","").attr("render-order",0);
+		svg.select("#comtext")
+			.text("");
+		svg.select("#anttext")
+			.text("");
+		svg.select("#nametext").text("");
 		})
 	  
 	   
