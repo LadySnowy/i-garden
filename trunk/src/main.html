@@ -19,7 +19,7 @@
 
 	<script>
 	var list = new Array();
-
+/*
 	list[0]={id: 0, name:"Onion", how_many: "",water_how_much: 1, water_how_often: 7, soil_temp: "",air_temp: "",
 		sunlight: "",root_depth: 12,min_spacing: 10,growing_area: "",common_pests: "",organic_pest_control: "",
 		inorganic_pest_control: "",plants_keep_pests_away: "",type: "",flower_size: "",flower_color: "",flower_scent: "",
@@ -48,7 +48,7 @@
 		soil_ph:"6.0-6.7",soil_texture: "",calories: "",vitamins: "",yield_per_plant: "",edible_part: "",
 		start: 15,harden: "",transplant: 90,harvest: 135,image_url: "",companions: "Onion",antagonists:"Carrot",
 		number: 10,health: 1};
-
+*/
 	site=new Object();
 	site.lenght=10;
 	site.width=15;
@@ -56,7 +56,7 @@
 	site.ph={name:"PH",value:6,units:"ph",min:0, max: 14, step:.1};
 	site.rainfall=20;
 	site.irragate={name:"Irrigation",value:20,units:"days/inch",min:0, max: 80, step:1};
-	site.shade={name:"Shade",value:5,units:"",min:0, max: 10, step:1};
+	site.shade={name:"Sunshine",value:5,units:"",min:1, max: 5, step:.25};
 	site.earlySeed=55;
 	site.lateSeed=99;
 	site.earlyHarden=80;
@@ -94,6 +94,10 @@
 		<div id="vegList">
 			<script>
 				drawList();
+				addPlant(35);
+				addPlant(58);
+				addPlant(43);
+				addPlant(15);
 				addPlant(20);
 				//deletPlant(1);
 				calculateHealth();

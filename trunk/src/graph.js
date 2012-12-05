@@ -127,7 +127,7 @@ function foGra(arr)
 	}
 	//alert(links);
 
-	var vis = d3.select("#forcegraph").append("svg:svg")
+	vis = d3.select("#forcegraph").append("svg:svg")
 		.attr("width", w)
 		.attr("height", h);
 		
@@ -322,7 +322,7 @@ function foGraCircle(arr)
 	//alert(links);
 
 
-	var vis = d3.select("#forcegraphcircle").append("svg:svg")
+	visc = d3.select("#forcegraphcircle").append("svg:svg")
 		.attr("width", w)
 		.attr("height", h);
 
@@ -337,7 +337,7 @@ function foGraCircle(arr)
 		.friction(.9)
 		.start();
 	
-	var link = vis.selectAll("line.link")
+	var link = visc.selectAll("line.link")
       .data(links)
     .enter().insert("svg:line", "circle.node")	
       .attr("class", "link")
@@ -349,7 +349,7 @@ function foGraCircle(arr)
 	  .style("stroke-width", 1.5);
 
 
-	var node = vis.selectAll("circle.node")
+	var node = visc.selectAll("circle.node")
 		.data(nodes)
 	  .enter().append("svg:circle")
 		.attr("class", "node")
@@ -362,10 +362,10 @@ function foGraCircle(arr)
 		.style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); })
 		.style("stroke-width", 1.5)
 		.call(force.drag)
-		.on("mouseover", fade(.1, vis, ""))
-		.on("mouseout", fade(1, vis, "none"));
+		.on("mouseover", fade(.1, visc, ""))
+		.on("mouseout", fade(1, visc, "none"));
 		/*
-		vis.append("svg:text")
+		visc.append("svg:text")
 			.attr("class", r)
             .attr("x", d.x+5)
             .attr("y", d.y+5)
@@ -380,7 +380,7 @@ function foGraCircle(arr)
 	//function(d, i) { return d.min_spacing; })
 	
 
-	var text = vis.selectAll("text").
+	var text = visc.selectAll("text").
 		  data(nodes).
 		  enter().
 		  append("svg:text").
@@ -396,7 +396,7 @@ function foGraCircle(arr)
 		  style("display", "none");
 
 
-	vis.style("opacity", 1e-6)
+	visc.style("opacity", 1e-6)
 	  .transition()
 		.duration(1000)
 		.style("opacity", 1);
@@ -411,6 +411,12 @@ function foGraCircle(arr)
 	});
 }
 
+function forceColor(vis){
+	//alert(vis);
+	vis.selectAll("circle").style("fill", function(d, i) { return calcColor(d.health); });
+	vis.selectAll("circle").style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); });
+}
+
 function fade(opacity, vis, display) {
         return function(d, i) {
 			//alert(d.id);
@@ -420,22 +426,7 @@ function fade(opacity, vis, display) {
 			
 			vis.selectAll("circle").style("opacity", //opacity
 			function(o) {
-				//if(o.id == d.id)
-				//{
-				//	vis.selectAll("text").style("display", function(o){
-				//		if(o.id==d.id)
-				//		{
-				//			//alert(o.id);
-				//			return display;
-				//		}
-				//		return "none";
-				//	});
-				//	return 1;
-				//}
-				//they say that debugging requeres more creativity than programing and so you can easily program something you can not debugging
-				//which is to say fuck you, me!!
-				//take the companions and antagonists plants for the o object make them into one array of numbers by removeing ", " and check if the selected node is in the array, this sets the opacity
-                thisOpacity = (link.indexOf(o.id))>-1 ? 1 : opacity;
+				thisOpacity = (link.indexOf(o.id))>-1 ? 1 : opacity;
                 this.setAttribute('opacity', thisOpacity);
                 return thisOpacity;
             });
