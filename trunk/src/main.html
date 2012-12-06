@@ -68,9 +68,9 @@
 	function handleChange(tab,object) {
 		//Plants Explorer
 		if(tab=="petrue" && !object.checked)
-			alert("unchecked");
+			dataChanged(list);
 		else if(tab=="petrue")
-			alert("checked");
+			dataChanged(allList);
 		
 		//Companions Explorer
 		if(tab=="comtrue" && !object.checked)
