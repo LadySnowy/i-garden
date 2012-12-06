@@ -170,6 +170,7 @@ fill: black;
 
 #tab_tab1 svg .unfocused path {
 stroke: #DBDBDB;
+opacity: 0;
 }
 
 #tab_tab1 svg .hover circle, #tab_tab1 svg .hover text {
