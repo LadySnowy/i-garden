@@ -76,7 +76,7 @@ function focus(plant_id){
 		var ants = original_data[plantindex].antagonists.split(', ');
 		var modarray = new Array();
 		var newlist = coms.concat(ants);
-		newlist.push(plantindex);
+		newlist.push(plant_id);
 		
 		for(var j = 0; j<original_data.length;j++){
 			for(var k = 0; k<newlist.length;k++){
