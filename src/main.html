@@ -65,6 +65,26 @@
 		}
 	}
 	
+	function handleChange(tab,object) {
+		//Plants Explorer
+		if(tab=="petrue" && !object.checked)
+			alert("unchecked");
+		else if(tab=="petrue")
+			alert("checked");
+		
+		//Companions Explorer
+		if(tab=="comtrue" && !object.checked)
+			alert("unchecked");
+		else if(tab=="comtrue")
+			alert("checked");
+			
+		//Similarity Explorer
+		if(tab=="simtrue" && !object.checked)
+			alert("unchecked");
+		else if(tab=="simtrue")
+			alert("checked");
+	}
+	
     
 
 	</script>
@@ -122,9 +142,21 @@
 		<div id = "botright" class="tabcontainer">
 			<div class="tab_nav">
 				<ul>
-					<li id="navtab_tab1" class="active"><a href="javascript:simple_tab('tab1')">Plant Explorer</a></li>
-					<li id="navtab_tab2"><a href="javascript:simple_tab('tab2')">Companion Explorer</a></li>
-					<li id="navtab_tab3"><a href="javascript:simple_tab('tab3')">Similarity Graph</a></li>
+					<li id="navtab_tab1" class="active"><a href="javascript:simple_tab('tab1')">Plant Explorer</a>
+					<div class="tabcheck">
+					<input type="checkbox" name="petrue" checked="checked" value="true" onchange='handleChange(this.name,this);'>Show All Plants
+					</div>
+					</li>
+					<li id="navtab_tab2"><a href="javascript:simple_tab('tab2')">Companion Explorer</a>
+					<div class="tabcheck">
+					<input type="checkbox" name="comtrue" checked="checked" value="true" onchange='handleChange(this.name,this);'>Show All Plants
+					</div>
+					</li>
+					<li id="navtab_tab3"><a href="javascript:simple_tab('tab3')">Similarity Graph</a>
+					<div class="tabcheck">
+					<input type="checkbox" name="simtrue" checked="checked" value="true" onchange='handleChange(this.name,this);'>Show All Plants
+					</div>
+					</li>
 				</ul>
 			</div>
 	
