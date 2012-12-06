@@ -258,10 +258,10 @@ function updateData(passed_data){
 			data[i][attrs[4]] = -50;
 		else{
 			if(data.length == 1){
-				data[i][attrs[4]] = soilTScale(avg) < 0 ? -50 : svgw * scale /2;
+				data[i][attrs[4]] = soilTScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
 			else {
-				data[i][attrs[4]] = soilTScale(avg);
+				data[i][attrs[4]] = soilTScale(avg) < 0 ? 0 : soilTScale(avg);
 			}
 		}
 			
@@ -274,10 +274,10 @@ function updateData(passed_data){
 			data[i][attrs[5]] = -50;
 		else{
 			if(data.length == 1){
-				data[i][attrs[5]] = soilGTScale(avg) < 0 ? -50 : svgw * scale /2;
+				data[i][attrs[5]] = soilGTScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
 			else {
-				data[i][attrs[5]] = soilGTScale(avg);
+				data[i][attrs[5]] = soilGTScale(avg) < 0 ? 0 : soilGTScale(avg);
 			}
 		}
 		
@@ -288,10 +288,10 @@ function updateData(passed_data){
 			data[i][attrs[3]] = -50;
 		else{
 			if(data.length == 1){
-				data[i][attrs[3]] = phScale(avg) < 0 ? -50 : svgw * scale /2;
+				data[i][attrs[3]] = phScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
 			else {
-				data[i][attrs[3]] = phScale(avg);
+				data[i][attrs[3]] = phScale(avg) < 0 ? 0 : phScale(avg);
 			}
 		}
 		
@@ -303,10 +303,10 @@ function updateData(passed_data){
 			data[i][attrs[6]] = -50;
 		else{
 			if(data.length == 1){
-				data[i][attrs[6]] = rootScale(avg) < 0 ? -50 : svgw * scale /2;
+				data[i][attrs[6]] = rootScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
 			else {
-				data[i][attrs[6]] = rootScale(avg);
+				data[i][attrs[6]] = rootScale(avg) < 0 ? 0 : rootScale(avg);
 			}
 		}
 			
@@ -316,8 +316,14 @@ function updateData(passed_data){
 		if(data[i][attrs[7]]=="0-0")
 			data[i][attrs[7]] = -50;
 		else{
-			data[i][attrs[7]] = airScale(avg);
+			if(data.length == 1){
+				data[i][attrs[7]] = airScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
+			else {
+				data[i][attrs[7]] = airScale(avg) < 0 ? 0 : airScale(avg);
+			}
+		}
+		
 			
 		data[i][attrs[8]] = spaceScale(data[i][attrs[8]]);
 		
@@ -327,15 +333,31 @@ function updateData(passed_data){
 		if(data[i][attrs[9]]=="0-0")
 			data[i][attrs[9]] = -50;
 		else{
-			data[i][attrs[9]] = yieldScale(avg);
+			if(data.length == 1){
+				data[i][attrs[9]] = yieldScale(avg) < 0 ? 0 : svgw * scale /2;
 			}
-			
-		data[i][attrs[10]] = sunScale(data[i][attrs[10]]);
-		
-		data[i][attrs[11]] = rainScale(data[i][attrs[11]]);
+			else {
+				data[i][attrs[9]] = yieldScale(avg) < 0 ? 0 : yieldScale(avg);
+			}
 		}
 		
+		tempi = sunScale(data[i][attrs[10]]);
+		if(data.length == 1){
+				data[i][attrs[10]] = tempi < 0 ? 0 : svgw * scale /2;
+		}
+		else {
+			data[i][attrs[10]] = tempi < 0 ? 0 : tempi;
+		}
 		
+		tempi = rainScale(data[i][attrs[11]]);
+		if(data.length == 1){
+				data[i][attrs[11]] = tempi < 0 ? 0 : svgw * scale /2;
+		}
+		else {
+			data[i][attrs[11]] = tempi < 0 ? 0 : tempi;
+		}
+		
+		}
 }
 
 function movedown(){
