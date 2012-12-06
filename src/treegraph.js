@@ -92,10 +92,10 @@ function focus(plant_id){
 		g.enter()
 		  .append("g")
 		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
-		  .attr("id",function(d){return "i" + d.id;})
 		  .append("path")
 		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
 		g.exit().remove();
+		g.attr("id",function(d){return "i" + d.id;});
 		transform();
 		setMouseEvent();
 		controlRedraw();
@@ -122,10 +122,10 @@ function dataChanged(passed_data){
 		g.enter()
 		  .append("g")
 		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
-		  .attr("id",function(d){return "i" + d.id;})
 		  .append("path")
 		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
 		g.exit().remove();
+		g.attr("id",function(d){return "i" + d.id;});
 		transform();
 		setMouseEvent();
 		controlRedraw();
@@ -256,24 +256,45 @@ function updateData(passed_data){
 		var avg = (parseInt(data[i][attrs[4]].substring(0, tempi)) + parseInt(data[i][attrs[4]].substring(tempi + 1, data[i][attrs[4]].length)))/2;
 		if(data[i][attrs[4]]=="0-0")
 			data[i][attrs[4]] = -50;
-		else
-			data[i][attrs[4]] = soilTScale(avg);
+		else{
+			if(data.length == 1){
+				data[i][attrs[4]] = soilTScale(avg) < 0 ? -50 : svgw * scale /2;
+			}
+			else {
+				data[i][attrs[4]] = soilTScale(avg);
+			}
+		}
+			
+		
 		
 		tempi = data[i][attrs[5]].indexOf("-");
 		avg = (parseInt(data[i][attrs[5]].substring(0, tempi)) + parseInt(data[i][attrs[5]].substring(tempi + 1, data[i][attrs[5]].length)))/2;
 		
 		if(data[i][attrs[5]]=="0-0")
 			data[i][attrs[5]] = -50;
-		else
-			data[i][attrs[5]] = soilGTScale(avg);
+		else{
+			if(data.length == 1){
+				data[i][attrs[5]] = soilGTScale(avg) < 0 ? -50 : svgw * scale /2;
+			}
+			else {
+				data[i][attrs[5]] = soilGTScale(avg);
+			}
+		}
 		
 		tempi = data[i][attrs[3]].indexOf("-");
 		avg = (parseInt(data[i][attrs[3]].substring(0, tempi)) + parseInt(data[i][attrs[3]].substring(tempi + 1, data[i][attrs[3]].length)))/2;
 		
 		if(data[i][attrs[3]]=="0-0")
 			data[i][attrs[3]] = -50;
-		else
-			data[i][attrs[3]] = phScale(avg);
+		else{
+			if(data.length == 1){
+				data[i][attrs[3]] = phScale(avg) < 0 ? -50 : svgw * scale /2;
+			}
+			else {
+				data[i][attrs[3]] = phScale(avg);
+			}
+		}
+		
 			
 		tempi = data[i][attrs[6]].indexOf("-");
 		avg = (parseInt(data[i][attrs[6]].substring(0, tempi)) + parseInt(data[i][attrs[6]].substring(tempi + 1, data[i][attrs[6]].length)))/2;
@@ -281,8 +302,13 @@ function updateData(passed_data){
 		if(data[i][attrs[6]]=="0-0")
 			data[i][attrs[6]] = -50;
 		else{
-			data[i][attrs[6]] = rootScale(avg);
+			if(data.length == 1){
+				data[i][attrs[6]] = rootScale(avg) < 0 ? -50 : svgw * scale /2;
 			}
+			else {
+				data[i][attrs[6]] = rootScale(avg);
+			}
+		}
 			
 		tempi = data[i][attrs[7]].indexOf("-");
 		avg = (parseInt(data[i][attrs[7]].substring(0, tempi)) + parseInt(data[i][attrs[7]].substring(tempi + 1, data[i][attrs[7]].length)))/2;
@@ -454,11 +480,11 @@ function initialize(){
 			g = svg.selectAll("g").data(data);
 			g.enter()
 			  .append("g")
-			  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
-			  .attr("id",function(d){return "i" + d.id;});
+			  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";});
 			g.exit().remove();
 			g.append("path")
 			.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
+			g.attr("id",function(d){return "i" + d.id;});
 			transform();
 			setMouseEvent();
 			controlRedraw();
@@ -564,6 +590,7 @@ function setMouseEvent(){
 				this.parentNode.appendChild(this);
 				var ag = d3.select(this);
 				
+				log(ag.attr("id"));
 				//Change attributes of all vegetables
 				svg.selectAll("g").attr("class","unfocused");
 				//Change attributes of hover
@@ -574,6 +601,7 @@ function setMouseEvent(){
 				//Change attributes of companions plants
 				
 					var coms = d.companions.split(', ');
+					log(coms);
 					for(var j = 0; j< coms.length; j++){
 						if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
 						svg.select("g#i"+coms[j]).attr("class","compath")
@@ -752,3 +780,9 @@ function transform(){
 	
 	
   }
+  
+  function log(msg) {
+    setTimeout(function() {
+        throw new Error(msg);
+    }, 0);
+}
