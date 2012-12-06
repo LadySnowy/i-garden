@@ -16,6 +16,7 @@ var sunScale;
 var rainScale;
 var dstart = 3;
 var scale = 0.7;
+var useMouse = true;
 var attrs = new Array();
 	   attrs[0] = "name";
 	   attrs[1] = "companions";
@@ -559,42 +560,43 @@ function setMouseEvent(){
 		*
 		*/
 		g.on("mouseover", function(d) {
-			
-        this.parentNode.appendChild(this);
-        var ag = d3.select(this);
-		
-		//Change attributes of all vegetables
-		svg.selectAll("g").attr("class","unfocused");
-		//Change attributes of hover
-		ag.attr("class","hover");
-		svg.select("#nametext").text("Name: " + ag.select(".name").text());
-		
-		var tempcomtext = "Companions: ";
-		//Change attributes of companions plants
-		
-			var coms = d.companions.split(', ');
-			for(var j = 0; j< coms.length; j++){
-				if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
-				svg.select("g#i"+coms[j]).attr("class","compath")
-				tempcomtext = tempcomtext + data[coms[j]].name + "; ";
-				}
+			if(useMouse){
+				this.parentNode.appendChild(this);
+				var ag = d3.select(this);
+				
+				//Change attributes of all vegetables
+				svg.selectAll("g").attr("class","unfocused");
+				//Change attributes of hover
+				ag.attr("class","hover");
+				svg.select("#nametext").text("Name: " + ag.select(".name").text());
+				
+				var tempcomtext = "Companions: ";
+				//Change attributes of companions plants
+				
+					var coms = d.companions.split(', ');
+					for(var j = 0; j< coms.length; j++){
+						if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
+						svg.select("g#i"+coms[j]).attr("class","compath")
+						tempcomtext = tempcomtext + data[coms[j]].name + "; ";
+						}
+					}
+				
+				svg.select("#comtext")
+					.text(tempcomtext)
+				//Change attributes of antagonists plants
+				tempcomtext = "Antagonists: ";
+				
+					var ants = d.antagonists.split(', ');
+					for(var j = 0; j< ants.length; j++){
+						if(typeof data[ants[j]] != "undefined" && data[ants[j]] != null){
+						svg.select("g#i"+ants[j]).attr("class","antpath")
+						tempcomtext = tempcomtext + data[ants[j]].name + "; ";
+						}
+					}
+				
+				svg.select("#anttext")
+					.text(tempcomtext)
 			}
-		
-		svg.select("#comtext")
-			.text(tempcomtext)
-		//Change attributes of antagonists plants
-		tempcomtext = "Antagonists: ";
-		
-			var ants = d.antagonists.split(', ');
-			for(var j = 0; j< ants.length; j++){
-			    if(typeof data[ants[j]] != "undefined" && data[ants[j]] != null){
-				svg.select("g#i"+ants[j]).attr("class","antpath")
-				tempcomtext = tempcomtext + data[ants[j]].name + "; ";
-				}
-			}
-		
-		svg.select("#anttext")
-			.text(tempcomtext)
 		})
 		.on("mouseout", function(d) {
 		//Reset
@@ -608,14 +610,24 @@ function setMouseEvent(){
 		
 		})
 		.on("click", function(d) {
-		    this.parentNode.appendChild(this);
-			var ag = d3.select(this);
-			focus(ag.attr("id").substring(1,ag.attr("id").length));
+		     if(useMouse){
+				this.parentNode.appendChild(this);
+				var ag = d3.select(this);
+				focus(ag.attr("id").substring(1,ag.attr("id").length));
+			}
 		})
 
 
 }
 function transform(){
+
+	svg.selectAll("g").attr("class","").attr("render-order",0);
+	svg.select("#comtext")
+		.text("");
+	svg.select("#anttext")
+		.text("");
+	svg.select("#nametext").text("");
+	useMouse = false;
 	
 	/**
 	*   Draw background grids' text
@@ -736,7 +748,7 @@ function transform(){
    		.text(function(d){return d[attrs[0]]})
   
   
-    
+    setTimeout(function(){useMouse = true;}, 1200);
 	
 	
   }
