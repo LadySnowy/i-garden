@@ -323,8 +323,8 @@ $( "#slider"+obj.name ).slider({
 function calculateHealth()
 {
 	//get site values
-	//get the total amount of water from irragation and rain fall as number of days to get an inch
-	var water = ((window.site.rainfall*window.site.irragate.value)+(window.site.irragate.value+365))/(365*window.site.irragate.value);
+	//get the total amount of water from irragation and rain fall as inche per day
+	var water = ((window.site.rainfall/365)+(1/window.site.irragate.value));
 	var ph=window.site.ph.value;
 	var light=window.site.shade.value;
 	
@@ -342,13 +342,13 @@ function plantHealth(arr, water, ph, light)
 	var health = 1;
 	
 	//get the plant water
-	j=parseInt(arr[x].water_how_often);
+	j=1/(parseFloat(arr[x].water_how_often));
 	//alert(phmin + " " + phmax);
 	//get the the standard divation
 	wstd=j/4;
 	//get the differance from avarage
 	wraw=Math.abs((j-water)/wstd);
-	//alert(phraw);		
+	//alert(arr[x].name+" "+j+" "+wstd+" "+wraw);		
 	health = (health/wraw>1)?health:health/wraw;
 	//alert("Data: " + x +" "+ health);
 	
@@ -419,9 +419,11 @@ function vegOver(id){
 	document.getElementById('PHRec').setAttribute("width", widthnum+"%");
 	
 	//get the plant water
-	y=parseFloat(window.allList[id].water_how_often);
+	y=1/(parseFloat(window.allList[id].water_how_often));
+	//alert(y);
 	//figure out how much comes from rain fall
-	l=1/(window.site.rainfall/365);
+	l=(window.site.rainfall/365);
+	//alert(l);
 	//water = 1/((window.site.rainfall/365)+(1/window.site.irragate.value));
 	//alert(l);
 	
@@ -430,8 +432,8 @@ function vegOver(id){
 	var waterScaleMin = window.site.irragate.min;
 	var waterScaleMax = window.site.irragate.max;	
 	//alert((phmin-phScaleMin)/(phScaleMax-phScaleMin));
-	var xnum = (((l-y)/y*l)-waterScaleMin)/(waterScaleMax-waterScaleMin)*100;
-	var widthnum = 5;
+	var xnum = (1/(y-l))/(waterScaleMax-waterScaleMin)*100-2;
+	var widthnum = 4;
 	
 	//alert(xnum);	
 	//display the water range
@@ -447,8 +449,8 @@ function vegOver(id){
 	var shadeScaleMin = window.site.shade.min;
 	var shadeScaleMax = window.site.shade.max;	
 	//alert((phmin-phScaleMin)/(phScaleMax-phScaleMin));
-	var xnum = ((y-shadeScaleMin)/(shadeScaleMax-shadeScaleMin)*100)-2.5;
-	var widthnum = 5;
+	var xnum = ((y-shadeScaleMin)/(shadeScaleMax-shadeScaleMin)*100)-2;
+	var widthnum = 4;
 	
 	//alert(xnum);	
 	//display the light range
@@ -457,10 +459,48 @@ function vegOver(id){
 	document.getElementById('SunshineRec').setAttribute("width", widthnum+"%");
 	
 	//modify the calender
-	document.getElementById('CalCompStart').setAttribute("opacity", ".1");
-	document.getElementById('CalCompTrans').setAttribute("opacity", ".1");
-	document.getElementById('CalCompGrow').setAttribute("opacity", ".1");
-	document.getElementById('CalCompHarv').setAttribute("opacity", ".1");	
+{
+	document.getElementById('CalCompStart').setAttribute("opacity", "0");
+	//get the start date string
+	sda=window.allList[id].when_plant;
+	var sdate = new Date(sda);
+	var sdd=sdate.getDOY();
+	
+	//get transplant dates
+	tda=window.allList[id].week_transplanting;
+	
+	var tds = tda.indexOf("-");
+	var tdmin = parseInt(tda.slice(0, tds));
+	var tdmax = parseInt(tda.slice(tds+1));
+	
+	//set start rec
+	document.getElementById('CalPlantStart').setAttribute("x", ((sdd/365)*100)+"%");
+	document.getElementById('CalPlantStart').setAttribute("width", (((tdmax*7)/365)*100)+"%");
+}	
+{
+	document.getElementById('CalCompTrans').setAttribute("opacity", "0");
+	
+	//get grow dates
+	mda=window.allList[id].mauraty;
+	
+	var mds = mda.indexOf("-");
+	var mdmin = parseInt(mda.slice(0, mds));
+	var mdmax = parseInt(mda.slice(mds+1));
+	
+	//set trans dates
+	document.getElementById('CalPlantTrans').setAttribute("x", (((sdd+(tdmin*7))/365)*100)+"%");
+	document.getElementById('CalPlantTrans').setAttribute("width", (((((tdmax-tdmin)*7)+(mdmax*7))/365)*100)+"%");
+}
+
+	document.getElementById('CalCompGrow').setAttribute("opacity", "0");	
+	
+	
+	//alert(sdate.getDOY());
+	
+	
+	
+
+	document.getElementById('CalCompHarv').setAttribute("opacity", "0");	
 }
 
 function vegOut(id){
@@ -547,4 +587,9 @@ function getRecipeInfo(callback)
 		
 	});
 	//alert(window.allList);
+}
+
+Date.prototype.getDOY = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((this - onejan) / 86400000);
 }
