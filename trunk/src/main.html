@@ -77,20 +77,10 @@
 <body>
 
 <div id="container">
-	<div id="left">
-		<div id="topleft">
-			top left
-		</div>
-		<div id="botleft">
-			bottom left
-			<script>
-			getRecipeInfo();
-			</script>
-		</div>
-	</div>
+
 
 	<div id = "center">
-		Center Column
+		Plants
 		<div id="vegList">
 			<script>
 				drawList();
@@ -107,14 +97,14 @@
 
 	<div id = "right">
 		<div id = "topright">
-			top right
+			Conditions
 			<div id="siteList"></div>
-			<script>
-			makeSliderObj(window.site.ph);
-			makeSliderObj(window.site.irragate);
-			makeSliderObj(window.site.shade);
-			cale();
-			</script>	
+			
+			<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.ph);</script></div>
+			<div style="float:left"><script>makeSliderObj(window.site.irragate);</script></div>
+			<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.shade);</script></div>
+			<script>cale();</script>	
+			
 			Hardiness Zone <input id="zone" type="text" size="3"/> Average Annual Rainfall <input id="rain" type="text" size="3"/>
 			<script>
 			document.getElementById('zone').value = site.zone;
@@ -126,7 +116,6 @@
 		</div>
 		
 		<div id = "botright" class="tabcontainer">
-			bottom right
 			<div class="tab_nav">
 				<ul>
 					<li id="navtab_tab1"><a href="javascript:simple_tab('tab1')">Plant Thing</a></li>
@@ -148,7 +137,6 @@
 			</div>
 
 			<div id="tab_tab3" class="tab" style="display:none;">
-				the node link thing is supposed to be here. not sure why it is just drawing it on the whole page.
 				<div id="forcegraph">		
 	
 				</div>
