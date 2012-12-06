@@ -54,6 +54,7 @@ display: none;
 }
 
 #botright{
+    padding-top: 10px;
 	height:100%;
 	border:5px solid green;
 	border-radius:25px;
