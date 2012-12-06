@@ -448,18 +448,20 @@ function initialize(){
 	   setMouseEvent();
 	  
 	   d3.select(window).on("keydown",function(d) {
-	    updateData(allList);
-		g = svg.selectAll("g").data(data);
-		g.enter()
-		  .append("g")
-		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
-		  .attr("id",function(d){return "i" + d.id;});
-		g.exit().remove();
-		g.append("path")
-		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
-		transform();
-		setMouseEvent();
-		controlRedraw();
+	    if(window.event.keyCode==27){
+			updateData(allList);
+			g = svg.selectAll("g").data(data);
+			g.enter()
+			  .append("g")
+			  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+			  .attr("id",function(d){return "i" + d.id;});
+			g.exit().remove();
+			g.append("path")
+			.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
+			transform();
+			setMouseEvent();
+			controlRedraw();
+		}
 	   })
 			
 	   
