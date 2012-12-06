@@ -81,14 +81,14 @@ function foGra(arr)
 	//alert(arr);
 	var w = d3.select("#botright").style("width").slice(0,-2)*.93,
 		h = d3.select("#botright").style("height").slice(0,-2)-130,
-		raScale = 8,
+		raScale = 16,
 		fill = d3.scale.category10(),
 		//created an array called nodes containint all of the objects of the passed arr
 		nodes = arr.map(Object);
 		//adds extra attribute to each object in the nodes array
 		nodes.forEach(function(o, i) {
-			o.y = (h/2)+(150*(Math.sin((2*3.14/59)*(i+.5))));
-			o.x = (w/2)+(150*(Math.cos((2*3.14/59)*(i+.5))));
+			o.y = (h/2)+(250*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = (w/2)+(250*(Math.cos((2*3.14/59)*(i+.5))));
 			o.r = raScale;
 		});
 		links = new Array();
@@ -110,7 +110,7 @@ function foGra(arr)
 			for(j in com)
 			{
 				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
-				links.push({source: nodes[x], target: nodes[r_table[com[j]]], type: 100, str: .8, color: "#0000FF"});				
+				links.push({source: nodes[x], target: nodes[r_table[com[j]]], type: 200, str: .8, color: "#0000FF"});				
 			}
 		}
 				
@@ -121,7 +121,7 @@ function foGra(arr)
 			for(j in anta)
 			{
 				//alert(nodes[x] + " " + nodes[r_table[com[j]]]);
-				links.push({source: nodes[x], target: nodes[r_table[anta[j]]], type: 200, str: 1, color: "#FF0000"});				
+				links.push({source: nodes[x], target: nodes[r_table[anta[j]]], type: 400, str: 1, color: "#FF0000"});				
 			}
 		}
 			
@@ -278,8 +278,8 @@ function foGraCircle(arr)
 		fill = d3.scale.category10(),
 		nodes = arr.map(Object);
 		nodes.forEach(function(o, i) {
-			o.y = (h/2)+(150*(Math.sin((2*3.14/59)*(i+.5))));
-			o.x = (w/2)+(150*(Math.cos((2*3.14/59)*(i+.5))));
+			o.y = (h/2)+(350*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = (w/2)+(350*(Math.cos((2*3.14/59)*(i+.5))));
 		});
 		links = new Array();
 	//alert(fill);
@@ -358,7 +358,7 @@ function foGraCircle(arr)
 		//d.x=250+(150*(Math.cos((2*3.14/59)*(i+.5))));
 		.attr("cy", function(d, i) { return d.y; })
 		//d.y=200+(150*(Math.sin((2*3.14/59)*(i+.5)))); 
-		.attr("r", 8)
+		.attr("r", 18)
 		.style("fill", function(d, i) { return calcColor(d.health); })
 		.style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); })
 		.style("stroke-width", 1.5)
