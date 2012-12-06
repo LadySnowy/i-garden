@@ -51,8 +51,9 @@ font-size: 13px;
 	margin: auto;
 }
 
-#siteList svg {
-display: none;
+.tabcheck {
+float: left;
+padding: 2px 5px;
 }
 
 #botright{
@@ -111,6 +112,8 @@ display: none;
     margin: 2px;
     padding: 2px 5px;
     text-decoration: none;
+	padding-right: 100px;
+	float: left;
 }
 
 .tabcontainer .tab_nav ul li.active{
