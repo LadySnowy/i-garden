@@ -2,24 +2,100 @@
 *   Global variables
 *
 */				 
-
 var svgw = 500;
 var svgh = 500;   
 var svg;
 var soilTScale;
 var phScale;
+var soilGTScale;
+var spaceScale;
+var airScale;
+var rootScale;
+var yieldScale;
 var dstart = 3;
-var attrs;
+var attrs = new Array();
+	   attrs[0] = "name";
+	   attrs[1] = "companions";
+	   attrs[2] = "antagonists";
+	   attrs[3] = "soil_ph";
+	   attrs[4] = "soil_temp";
+	   attrs[5] = "soil_temp_germ";
+	   attrs[6] = "root_depth";
+	   attrs[7] = "air_temp";
+	   attrs[8] = "min_spacing";
+	   attrs[9] = "yeild_plant";
 var steps = 70;
 var translateX = 100;
 var translateY = 400;
 var radius = 3;
 var temp = 0;
-var mode = "nonselect";
+var data;
+var g;
+var original_data;
+var display = new Array();
+	   display[0] = "name";
+	   display[1] = "companions";
+	   display[2] = "antagonists";
+	   display[3] = "Soil pH";
+	   display[4] = "Soil Temperature (F)";
+	   display[5] = "Soil Germination Temperature (F)";
+	   display[6] = "Root Depth"
+	   display[7] = "Air Temperature (F)"
+	   display[8] = "Min Spacing for Plants (inches)"
+	   display[9] = "Pounds Yield per Plant"
 
-function createTreeGraph(original_data){
-	
-	/**
+
+function createTreeGraph(passed_data){
+
+	svg = d3.select("div#tab_tab1").append("svg");   
+	updateData(passed_data);
+	initialize();
+	transform();
+}
+
+function focus(plant_id){
+	var plantindex = -1;
+	for(var j = 0; j<original_data.length;j++)
+	{
+		if(original_data[j].id == plant_id)
+		{
+			plantindex = j;
+			break;
+		}
+	}
+	//alert(plantindex);
+	if(plantindex != -1){
+		var coms = original_data[plantindex].companions.split(', ');
+		var ants = original_data[plantindex].antagonists.split(', ');
+		var modarray = new Array();
+		var newlist = coms.concat(ants);
+		newlist.push(plantindex);
+		
+		for(var j = 0; j<original_data.length;j++){
+			for(var k = 0; k<newlist.length;k++){
+				if(original_data[j].id==newlist[k]){
+					modarray.push(clone(original_data[j]));
+					break;
+				}
+			}
+		}
+		test = true;
+		updateData(modarray);
+		g = svg.selectAll("g").data(data);
+		g.enter()
+		  .append("g")
+		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		  .attr("id",function(d){return "i" + d.id;})
+		  .append("path")
+		.attr("d",function(d){return "m "+svgw/2+" "+ 250})
+		g.exit().remove();
+		transform();
+		setMouseEvent();
+		controlRedraw();
+	}
+}
+
+/**
 		* Method for copying objects
 		*
 		*/
@@ -32,48 +108,18 @@ function createTreeGraph(original_data){
 		} else newObj[i] = o[i]
 	  } return newObj;
 	};
+
+function updateData(passed_data){
 	
 	
-		svg = d3.select("div#tab_tab1").append("svg");
-		
-		
-	   
-	   
-	   
-	   /**
+    /**
 		*   Data
 		*
 		*/
+	   original_data = clone(passed_data);
+	   data = clone(original_data);
 	   
-	   var data = clone(original_data);
-	   
-	   
-	   attrs = new Array();
-	   attrs[0] = "name";
-	   attrs[1] = "companions";
-	   attrs[2] = "antagonists";
-	   attrs[3] = "soil_ph";
-	   attrs[4] = "soil_temp";
-	   attrs[5] = "soil_temp_germ";
-	   attrs[6] = "root_depth";
-	   attrs[7] = "air_temp";
-	   attrs[8] = "min_spacing";
-	   attrs[9] = "yeild_plant";
-	   
-	   var display = new Array();
-	   display[0] = "name";
-	   display[1] = "companions";
-	   display[2] = "antagonists";
-	   display[3] = "Soil pH";
-	   display[4] = "Soil Temperature (F)";
-	   display[5] = "Soil Germination Temperature (F)";
-	   display[6] = "Root Depth"
-	   display[7] = "Air Temperature (F)"
-	   display[8] = "Min Spacing for Plants (inches)"
-	   display[9] = "Pounds Yield per Plant"
-	   
-	   
-	   
+
 	   
 	   soilTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -90,7 +136,7 @@ function createTreeGraph(original_data){
 						 }))])
 						 .range([0, svgw]);
 						 
-	   var soilGTScale = d3.scale.linear()
+	   soilGTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[5]].indexOf("-");
 						 return data[attrs[5]].substring(0, tempi);})
@@ -103,7 +149,7 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 						 
-		var airScale = d3.scale.linear()
+		airScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[7]].indexOf("-");
 						 return data[attrs[7]].substring(0, tempi);})
@@ -129,7 +175,7 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 		
-		var rootScale = d3.scale.linear()
+		rootScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[6]].indexOf("-");
 						 return data[attrs[6]].substring(0, tempi);})
@@ -142,7 +188,7 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 		
-		var spaceScale = d3.scale.linear()
+		spaceScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 return data[attrs[8]];})
 						 )
@@ -151,7 +197,7 @@ function createTreeGraph(original_data){
 						 )])
 						 .range([0, svgw]);
 						 
-		var yieldScale = d3.scale.linear()
+		yieldScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
 						 var tempi = data[attrs[9]].indexOf("-");
 						 return data[attrs[9]].substring(0, tempi);})
@@ -219,23 +265,69 @@ function createTreeGraph(original_data){
 			data[i][attrs[9]] = yieldScale(avg);
 			}
 		}
-		
-		
-		
-	
-	var g;
-	
-	
-	initialize();
-	transform();
-	
-	
-	
-	
-	
-   
+}
 
-   function initialize(){  
+function movedown(){
+     this.parentNode.appendChild(this);
+    var clickcontrol = d3.select(this);
+	
+	if(clickcontrol.attr("id") > dstart){
+	var id = clickcontrol.attr("id");
+	var previd = parseInt(clickcontrol.attr("id")) - 1;
+	var tempstring = attrs[id];
+    attrs[id] = attrs[previd];
+    attrs[previd] = tempstring;
+	tempstring = display[id];
+    display[id] = display[previd];
+    display[previd] = tempstring;
+	transform();
+	controlRedraw();
+	}
+  }
+  
+ function moveup(){
+     this.parentNode.appendChild(this);
+    var clickcontrol = d3.select(this);
+	
+	if(clickcontrol.attr("id") < attrs.length - 1){
+	var id = clickcontrol.attr("id");
+	var nextid = parseInt(clickcontrol.attr("id")) + 1;
+	var tempstring = attrs[id];
+    attrs[id] = attrs[nextid];
+    attrs[nextid] = tempstring;
+	tempstring = display[id];
+    display[id] = display[nextid];
+    display[nextid] = tempstring;
+	transform();
+	controlRedraw();
+	}
+  }
+
+
+function controlRedraw(){
+		
+        svg = d3.select("div#tab_tab1 svg");
+		svg.select(".userph").transition()
+		.attr("cx",function(d){
+		var tempvar = phScale(site.ph.value);
+		if(tempvar <= 0)
+			tempvar = 0;
+		if(tempvar >= svgw)
+			tempvar = svgw;
+		return tempvar;})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="soil_ph")
+				return 250 - steps * (j-dstart+1);
+		}
+		})
+   		.attr("r",function(d){return radius * 2});
+
+}
+
+function initialize(){  
 
 		/**
 		*   Show hovered plant
@@ -272,76 +364,23 @@ function createTreeGraph(original_data){
 	  .append("g")
 	  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
 	  .attr("id",function(d){return "i" + d.id;})
-	  /**
-		*   Mouse events
-		*
-		*/
-		.on("mouseover", function(d) {
-		if(mode=="nonselect"){		
-        this.parentNode.appendChild(this);
-        var ag = d3.select(this);
-		
-		//Change attributes of all vegetables
-		svg.selectAll("g").attr("class","unfocused");
-		//Change attributes of hover
-		ag.attr("class","hover");
-		svg.select("#nametext").text("Name: " + ag.select(".name").text());
-		
-		var tempcomtext = "Companions: ";
-		//Change attributes of companions plants
-		
-			var coms = d.companions.split(', ');
-			for(var j = 0; j< coms.length; j++){
-				if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
-				svg.select("g#i"+coms[j]).attr("class","compath")
-				tempcomtext = tempcomtext + data[coms[j]].name + "; ";
-				}
-			}
-		
-		svg.select("#comtext")
-			.text(tempcomtext)
-		//Change attributes of antagonists plants
-		tempcomtext = "Antagonists: ";
-		
-			var ants = d.antagonists.split(', ');
-			for(var j = 0; j< ants.length; j++){
-			    if(typeof data[ants[j]] != "undefined" && data[ants[j]] != null){
-				svg.select("g#i"+ants[j]).attr("class","antpath")
-				tempcomtext = tempcomtext + data[ants[j]].name + "; ";
-				}
-			}
-		
-		svg.select("#anttext")
-			.text(tempcomtext)
-		}})
-		.on("mouseout", function(d) {
-		//Reset
-		if(mode=="nonselect"){
-		svg.selectAll("g").attr("class","").attr("render-order",0);
-		svg.select("#comtext")
-			.text("");
-		svg.select("#anttext")
-			.text("");
-		svg.select("#nametext").text("");
-		}
-		})
-		.on("mouseclick", function(d) {
-		if(mode=="nonselect"){
-			mode = "select";
-			this.parentNode.appendChild(this);
-			var ag = d3.select(this);
-			
-			//Change attributes of all vegetables
-			svg.selectAll("g").attr("class","unfocused");
-			//Change attributes of hover
-			ag.attr("class","selected");
-			}
-		else
-			mode="nonselect";
-		
-		})
 	  
-	   
+	   setMouseEvent();
+	  
+	   d3.select(window).on("keydown",function(d) {
+	    updateData(allList);
+		g = svg.selectAll("g").data(data);
+		g.enter()
+		  .append("g")
+		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		  .attr("id",function(d){return "i" + d.id;});
+		g.exit().remove();
+		g.append("path")
+		.attr("d",function(d){return "m "+svgw/2+" "+ 250})
+		transform();
+		setMouseEvent();
+		controlRedraw();
+	   })
 			
 	   
 	   
@@ -398,8 +437,69 @@ function createTreeGraph(original_data){
 		
 	}
 	
-	
-	function transform(){
+function setMouseEvent(){
+		/**
+		*   Mouse events
+		*
+		*/
+		g.on("mouseover", function(d) {
+			
+        this.parentNode.appendChild(this);
+        var ag = d3.select(this);
+		
+		//Change attributes of all vegetables
+		svg.selectAll("g").attr("class","unfocused");
+		//Change attributes of hover
+		ag.attr("class","hover");
+		svg.select("#nametext").text("Name: " + ag.select(".name").text());
+		
+		var tempcomtext = "Companions: ";
+		//Change attributes of companions plants
+		
+			var coms = d.companions.split(', ');
+			for(var j = 0; j< coms.length; j++){
+				if(typeof data[coms[j]] != "undefined" && data[coms[j]] != null){
+				svg.select("g#i"+coms[j]).attr("class","compath")
+				tempcomtext = tempcomtext + data[coms[j]].name + "; ";
+				}
+			}
+		
+		svg.select("#comtext")
+			.text(tempcomtext)
+		//Change attributes of antagonists plants
+		tempcomtext = "Antagonists: ";
+		
+			var ants = d.antagonists.split(', ');
+			for(var j = 0; j< ants.length; j++){
+			    if(typeof data[ants[j]] != "undefined" && data[ants[j]] != null){
+				svg.select("g#i"+ants[j]).attr("class","antpath")
+				tempcomtext = tempcomtext + data[ants[j]].name + "; ";
+				}
+			}
+		
+		svg.select("#anttext")
+			.text(tempcomtext)
+		})
+		.on("mouseout", function(d) {
+		//Reset
+		
+		svg.selectAll("g").attr("class","").attr("render-order",0);
+		svg.select("#comtext")
+			.text("");
+		svg.select("#anttext")
+			.text("");
+		svg.select("#nametext").text("");
+		
+		})
+		.on("click", function(d) {
+		    this.parentNode.appendChild(this);
+			var ag = d3.select(this);
+			focus(ag.attr("id").substring(1,ag.attr("id").length));
+		})
+
+
+}
+function transform(){
 	
 	/**
 	*   Draw background grids' text
@@ -484,15 +584,16 @@ function createTreeGraph(original_data){
 
    for(var j=dstart;j<attrs.length;j++)
    {   
-   g.append("text")
-   		.attr("x",function(d){return d[attrs[j]] + 5})
-   		.attr("y",function(d){return 250 - steps * (j-dstart+1) - 5})
-   		.text(function(d,i){
-		var tempv = original_data[i][attrs[j]];
-		if(tempv == "0-0")
-		return "Unknown";
-		else
-		return tempv;})
+	   g.append("text")
+			.attr("x",function(d){return d[attrs[j]] + 5})
+			.attr("y",function(d){return 250 - steps * (j-dstart+1) - 5})
+			.text(function(d,i){
+			
+			var tempv = original_data[i][attrs[j]];
+			if(tempv == "0-0")
+			return "Unknown";
+			else
+			return tempv;})
 	}
    	
    	/**
@@ -513,66 +614,3 @@ function createTreeGraph(original_data){
 	
 	
   }
-  
-  function moveup(){
-     this.parentNode.appendChild(this);
-    var clickcontrol = d3.select(this);
-	
-	if(clickcontrol.attr("id") < attrs.length - 1){
-	var id = clickcontrol.attr("id");
-	var nextid = parseInt(clickcontrol.attr("id")) + 1;
-	var tempstring = attrs[id];
-    attrs[id] = attrs[nextid];
-    attrs[nextid] = tempstring;
-	tempstring = display[id];
-    display[id] = display[nextid];
-    display[nextid] = tempstring;
-	transform();
-	controlRedraw();
-	}
-  }
-  
-  function movedown(){
-     this.parentNode.appendChild(this);
-    var clickcontrol = d3.select(this);
-	
-	if(clickcontrol.attr("id") > dstart){
-	var id = clickcontrol.attr("id");
-	var previd = parseInt(clickcontrol.attr("id")) - 1;
-	var tempstring = attrs[id];
-    attrs[id] = attrs[previd];
-    attrs[previd] = tempstring;
-	tempstring = display[id];
-    display[id] = display[previd];
-    display[previd] = tempstring;
-	transform();
-	controlRedraw();
-	}
-  }
-  
-}
-
-
-function controlRedraw(){
-		
-        svg = d3.select("div#tab_tab1 svg");
-		svg.select(".userph").transition()
-		.attr("cx",function(d){
-		var tempvar = phScale(site.ph.value);
-		if(tempvar <= 0)
-			tempvar = 0;
-		if(tempvar >= svgw)
-			tempvar = svgw;
-		return tempvar;})
-   		.attr("cy",function(d){
-		
-		for(var j=0; j<attrs.length; j++)
-		{
-			if(attrs[j]=="soil_ph")
-				return 250 - steps * (j-dstart+1);
-		}
-		})
-   		.attr("r",function(d){return radius * 2});
-
-}
-
