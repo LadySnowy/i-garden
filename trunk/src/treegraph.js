@@ -12,6 +12,8 @@ var spaceScale;
 var airScale;
 var rootScale;
 var yieldScale;
+var sunScale;
+var rainScale;
 var dstart = 3;
 var attrs = new Array();
 	   attrs[0] = "name";
@@ -24,9 +26,11 @@ var attrs = new Array();
 	   attrs[7] = "air_temp";
 	   attrs[8] = "min_spacing";
 	   attrs[9] = "yeild_plant";
+	   attrs[10] = "sunlight";
+	   attrs[11] = "water_how_often";
 var steps = 70;
 var translateX = 100;
-var translateY = 400;
+var translateY = 550;
 var radius = 3;
 var temp = 0;
 var data;
@@ -43,7 +47,8 @@ var display = new Array();
 	   display[7] = "Air Temperature (F)"
 	   display[8] = "Min Spacing for Plants (inches)"
 	   display[9] = "Pounds Yield per Plant"
-
+	   display[10] = "Sunlight"
+	   display[11] = "Water Requirement (days/inch)"
 
 function createTreeGraph(passed_data){
 
@@ -210,6 +215,23 @@ function updateData(passed_data){
 						 )])
 						 .range([0, svgw]);
 		
+		sunScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 return data[attrs[10]];})
+						 )
+						 , Math.max.apply(Math,data.map(function(data){
+						 return data[attrs[10]];})
+						 )])
+						 .range([0, svgw]);
+						 
+		rainScale = d3.scale.linear()
+						 .domain([Math.min.apply(Math,data.map(function(data){
+						 return data[attrs[11]];})
+						 )
+						 , Math.max.apply(Math,data.map(function(data){
+						 return data[attrs[11]];})
+						 )])
+						 .range([0, svgw]);
 			
 		
 		for(var i = 0; i < data.length; i++){
@@ -264,7 +286,13 @@ function updateData(passed_data){
 		else{
 			data[i][attrs[9]] = yieldScale(avg);
 			}
+			
+		data[i][attrs[10]] = sunScale(data[i][attrs[10]]);
+		
+		data[i][attrs[11]] = rainScale(data[i][attrs[11]]);
 		}
+		
+		
 }
 
 function movedown(){
@@ -320,6 +348,42 @@ function controlRedraw(){
 		for(var j=0; j<attrs.length; j++)
 		{
 			if(attrs[j]=="soil_ph")
+				return 250 - steps * (j-dstart+1);
+		}
+		})
+   		.attr("r",function(d){return radius * 2});
+		
+		svg.select(".userwater").transition()
+		.attr("cx",function(d){
+		var tempvar = rainScale(1/((1/site.irragate.value)+(site.rainfall/365)));
+		if(tempvar <= 0)
+			tempvar = 0;
+		if(tempvar >= svgw)
+			tempvar = svgw;
+		return tempvar;})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="water_how_often")
+				return 250 - steps * (j-dstart+1);
+		}
+		})
+   		.attr("r",function(d){return radius * 2});
+		
+		svg.select(".usersun").transition()
+		.attr("cx",function(d){
+		var tempvar = sunScale(site.shade.value);
+		if(tempvar <= 0)
+			tempvar = 0;
+		if(tempvar >= svgw)
+			tempvar = svgw;
+		return tempvar;})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="sunlight")
 				return 250 - steps * (j-dstart+1);
 		}
 		})
@@ -434,7 +498,41 @@ function initialize(){
 		})
    		.attr("r",function(d){return radius * 2});
 	
+	//water
+	svg.append("circle")
+		.attr("class","userwater")
+		.attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		.attr("cx",function(d){return rainScale(1/((1/site.irragate.value)+(site.rainfall/365)));
 		
+		})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="water_how_often"){
+				return 250 - steps * (j-dstart+1);
+				}
+		}
+		
+		})
+   		.attr("r",function(d){return radius * 2});
+	
+	//sunlight
+	svg.append("circle")
+		.attr("class","usersun")
+		.attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		.attr("cx",function(d){return sunScale(site.shade.value)})
+   		.attr("cy",function(d){
+		
+		for(var j=0; j<attrs.length; j++)
+		{
+			if(attrs[j]=="sunlight"){
+				return 250 - steps * (j-dstart+1);
+				}
+		}
+		
+		})
+   		.attr("r",function(d){return radius * 2});
 	}
 	
 function setMouseEvent(){
@@ -558,7 +656,9 @@ function transform(){
   + " l " + (d[attrs[dstart+3]]-d[attrs[dstart+2]]) + " -" + steps
   + " l " + (d[attrs[dstart+4]]-d[attrs[dstart+3]]) + " -" + steps
   + " l " + (d[attrs[dstart+5]]-d[attrs[dstart+4]]) + " -" + steps  
-  + " l " + (d[attrs[dstart+6]]-d[attrs[dstart+5]]) + " -" + steps })
+  + " l " + (d[attrs[dstart+6]]-d[attrs[dstart+5]]) + " -" + steps
+  + " l " + (d[attrs[dstart+7]]-d[attrs[dstart+6]]) + " -" + steps
+  + " l " + (d[attrs[dstart+8]]-d[attrs[dstart+7]]) + " -" + steps})
   
   
   
@@ -592,6 +692,14 @@ function transform(){
 			var tempv = original_data[i][attrs[j]];
 			if(tempv == "0-0")
 			return "Unknown";
+			else if(attrs[j]=="sunlight"){
+				if(tempv==5.0)
+					return "Full Sun";
+				else if(tempv==4.5)
+					return "Full Sun, Part Shade";
+				else if(tempv==4.0)
+					return "Part Shade, Full Shade";
+			}
 			else
 			return tempv;})
 	}
