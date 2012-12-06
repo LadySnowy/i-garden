@@ -13,7 +13,10 @@ div.onmouseout=function()
 {
 	vegOut(arr[itemNum].id);
 }
-;
+div.onclick=function()
+{
+	focus(arr[itemNum].id);
+}
 
 //make paragraph for label
 var para=document.createElement("div");
