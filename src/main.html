@@ -5,6 +5,7 @@
 	<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js"></script>
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js"></script>
+	
 
 	<script src="slider.js"></script>
 	<script src="plantGarden.js"></script>
@@ -42,6 +43,29 @@
 
 	var allList = new Array();
 	var recipeList = new Array();
+	var listname = new Array();
+	
+	function createAdd(){
+		for(var i=0;i<allList.length;i++)
+			listname.push(allList[i].name);
+		$( "#tags" ).autocomplete({
+			source: listname
+		});
+	}
+	
+	function goSubmit(e) {
+		if (e.keyCode == 13) {
+			var tempname = document.getElementById("tags").value;
+			for(var i=0;i<allList.length;i++){
+				if(allList[i].name==tempname){
+					addPlant(allList[i].id);
+					return;
+				}	
+			}
+		}
+	}
+	
+    
 
 	</script>
 </head>
@@ -52,6 +76,10 @@
 
 	<div id = "center">
 		Plants
+		<div class="ui-widget">
+			<label for="tags">Add: </label>
+			<input id="tags" onkeypress="goSubmit(event)"/>
+		</div>
 		<div id="vegList">
 			<script>
 				drawList();
