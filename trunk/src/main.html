@@ -71,18 +71,6 @@
 			dataChanged(list);
 		else if(tab=="petrue")
 			dataChanged(allList);
-		
-		//Companions Explorer
-		if(tab=="comtrue" && !object.checked)
-			alert("unchecked");
-		else if(tab=="comtrue")
-			alert("checked");
-			
-		//Similarity Explorer
-		if(tab=="simtrue" && !object.checked)
-			alert("unchecked");
-		else if(tab=="simtrue")
-			alert("checked");
 	}
 	
     
@@ -103,13 +91,13 @@
 			<div id="vegList">
 				<script>
 					drawList();
-					addPlant(35);
-					addPlant(58);
-					addPlant(43);
-					addPlant(15);
-					addPlant(20);
+					//addPlant(35);
+					//addPlant(58);
+					//addPlant(43);
+					//addPlant(15);
+					//addPlant(20);
 					//deletPlant(1);
-					calculateHealth();				
+					//calculateHealth();				
 				</script>
 			</div>
 			<div id="vegSelect">
@@ -148,14 +136,10 @@
 					</div>
 					</li>
 					<li id="navtab_tab2"><a href="javascript:simple_tab('tab2')">Companion Explorer</a>
-					<div class="tabcheck">
-					<input type="checkbox" name="comtrue" checked="checked" value="true" onchange='handleChange(this.name,this);'>Show All Plants
-					</div>
+					
 					</li>
 					<li id="navtab_tab3"><a href="javascript:simple_tab('tab3')">Similarity Graph</a>
-					<div class="tabcheck">
-					<input type="checkbox" name="simtrue" checked="checked" value="true" onchange='handleChange(this.name,this);'>Show All Plants
-					</div>
+					
 					</li>
 				</ul>
 			</div>
