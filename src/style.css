@@ -1,5 +1,7 @@
 html, body {
 height: 100%;
+font-family: tahoma;
+font-size: 13px;
 }
 
 #container {
@@ -100,7 +102,6 @@ display: none;
 	border-bottom:none;
 	margin-right:10px;
 	font-family:verdana;
-	font-size:.8em;
 	font-weight:bold;
 	color:#fff;
 }
