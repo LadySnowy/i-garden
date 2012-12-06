@@ -20,8 +20,9 @@ var para=document.createElement("div");
 //make label
 var lab=document.createElement("label");
 lab.htmlFor="amount"+arr[itemNum].id;
-var node1=document.createTextNode(arr[itemNum].name+" yield:");
+var node1=document.createTextNode(arr[itemNum].name);
 
+/*
 //make input
 var inp=document.createElement("input");
 inp.type="text";
@@ -29,15 +30,16 @@ inp.id="amount"+arr[itemNum].id;
 inp.style.border="0"; 
 inp.style.color="#f6931f";	
 inp.style.fontWeight="bold";
+*/
 
 //add everthing to the paragraoh
 lab.appendChild(node1);
 para.appendChild(lab);
-para.appendChild(inp);
+//para.appendChild(inp);
 
 //make slider div
-var div1=document.createElement("div");
-div1.id="slider"+arr[itemNum].id;
+//var div1=document.createElement("div");
+//div1.id="slider"+arr[itemNum].id;
 
 //create close button
 var close=document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -75,21 +77,21 @@ tx1.textContent = max;
 plot.appendChild(tx);
 plot.appendChild(tx1);
 
-div1.appendChild(plot);
+//div1.appendChild(plot);
 
 var para1=document.createElement("p");
 var para2=document.createElement("p");
 
 //add everything to the vegitable contanier div
 div.appendChild(para);
-div.appendChild(div1);
+//div.appendChild(div1);
 div.appendChild(para1);
 div.appendChild(para2);
 
 //add vegitable contanier to vegList
 var element=document.getElementById("list");
 element.appendChild(div);
-
+/*
 $( "#slider"+arr[itemNum].id).slider({
 		//range: true,
 		min: min,
@@ -103,6 +105,7 @@ $( "#slider"+arr[itemNum].id).slider({
 		}
 	});
 	$( "#amount"+arr[itemNum].id).val( $( "#slider"+arr[itemNum].id).slider( "values", 0 ) + " " + units );
+*/
 }	
 
 function redra()
