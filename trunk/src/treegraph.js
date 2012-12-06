@@ -324,8 +324,13 @@ function updateData(passed_data){
 			}
 		}
 		
-			
-		data[i][attrs[8]] = spaceScale(data[i][attrs[8]]);
+		tempi = spaceScale(data[i][attrs[8]]);
+		if(data.length == 1){
+				data[i][attrs[8]] = svgw * scale /2;
+		}
+		else {
+			data[i][attrs[8]] = tempi < 0 ? 0 : tempi;
+		}	
 		
 		tempi = data[i][attrs[9]].indexOf("-");
 		avg = (parseInt(data[i][attrs[9]].substring(0, tempi)) + parseInt(data[i][attrs[9]].substring(tempi + 1, data[i][attrs[9]].length)))/2;
@@ -661,7 +666,7 @@ function setMouseEvent(){
 		
 		})
 		.on("click", function(d) {
-		     if(useMouse){
+		     if(useMouse && data.length > 1){
 				this.parentNode.appendChild(this);
 				var ag = d3.select(this);
 				focus(ag.attr("id").substring(1,ag.attr("id").length));
