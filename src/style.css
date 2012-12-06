@@ -191,7 +191,7 @@ stroke: blue;
 opacity: 1;
 }
 
-#tab_tab1 svg .userph {
+#tab_tab1 svg .userph, #tab_tab1 svg .userwater, #tab_tab1 svg .usersun {
 fill: orange;
 opacity: 1;
 }
