@@ -646,7 +646,7 @@ function transform(){
 		.attr("y",translateY+250 - steps * (i-dstart+1) - 30)
 		.attr("width",16)
 		.attr("height",16)
-		.attr("xlink:href","images/up.png")
+		.attr("xlink:href","images/up.jpg")
 		.on("click",moveup)
 		
 	svg.append("image")
@@ -656,7 +656,7 @@ function transform(){
 		.attr("y",translateY+250 - steps * (i-dstart+1) + 5)
 		.attr("width",16)
 		.attr("height",16)
-		.attr("xlink:href","images/down.png")
+		.attr("xlink:href","images/down.jpg")
 		.on("click",movedown)
 	}
 	
