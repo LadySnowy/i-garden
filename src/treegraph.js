@@ -2,8 +2,8 @@
 *   Global variables
 *
 */				 
-var svgw = 500;
-var svgh = 500;   
+var svgw;
+var svgh = 300;   
 var svg;
 var soilTScale;
 var phScale;
@@ -15,6 +15,7 @@ var yieldScale;
 var sunScale;
 var rainScale;
 var dstart = 3;
+var scale = 0.7;
 var attrs = new Array();
 	   attrs[0] = "name";
 	   attrs[1] = "companions";
@@ -28,9 +29,9 @@ var attrs = new Array();
 	   attrs[9] = "yeild_plant";
 	   attrs[10] = "sunlight";
 	   attrs[11] = "water_how_often";
-var steps = 70;
+var steps = 50;
 var translateX = 100;
-var translateY = 550;
+var translateY = 330;
 var radius = 3;
 var temp = 0;
 var data;
@@ -51,8 +52,8 @@ var display = new Array();
 	   display[11] = "Water Requirement (days/inch)"
 
 function createTreeGraph(passed_data){
-
-	svg = d3.select("div#tab_tab1").append("svg");   
+    svgw = d3.select("#tab_tab1").style("width").slice(0,-2)*.93;
+	svg = d3.select("div#tab_tab1").append("svg").attr("width",svgw);   
 	updateData(passed_data);
 	initialize();
 	transform();
@@ -92,7 +93,7 @@ function focus(plant_id){
 		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
 		  .attr("id",function(d){return "i" + d.id;})
 		  .append("path")
-		.attr("d",function(d){return "m "+svgw/2+" "+ 250})
+		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
 		g.exit().remove();
 		transform();
 		setMouseEvent();
@@ -139,7 +140,7 @@ function updateData(passed_data){
 						 return data[attrs[4]].substring(tempi + 1, data[attrs[4]].length);
 						 
 						 }))])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 						 
 	   soilGTScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -152,7 +153,7 @@ function updateData(passed_data){
 						 var tempi = data[attrs[5]].indexOf("-");
 						 return data[attrs[5]].substring(tempi + 1, data[attrs[5]].length);})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 						 
 		airScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -165,7 +166,7 @@ function updateData(passed_data){
 						 var tempi = data[attrs[7]].indexOf("-");
 						 return data[attrs[7]].substring(tempi + 1, data[attrs[7]].length);})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 						 
 		phScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -178,7 +179,7 @@ function updateData(passed_data){
 						 var tempi = data[attrs[3]].indexOf("-");
 						 return data[attrs[3]].substring(tempi + 1, data[attrs[3]].length);})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 		
 		rootScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -191,7 +192,7 @@ function updateData(passed_data){
 						 var tempi = data[attrs[6]].indexOf("-");
 						 return data[attrs[6]].substring(tempi + 1, data[attrs[6]].length);})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 		
 		spaceScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -200,7 +201,7 @@ function updateData(passed_data){
 						 , Math.max.apply(Math,data.map(function(data){
 						 return data[attrs[8]];})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 						 
 		yieldScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -213,7 +214,7 @@ function updateData(passed_data){
 						 var tempi = data[attrs[9]].indexOf("-");
 						 return data[attrs[9]].substring(tempi + 1, data[attrs[9]].length);})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 		
 		sunScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -222,7 +223,7 @@ function updateData(passed_data){
 						 , Math.max.apply(Math,data.map(function(data){
 						 return data[attrs[10]];})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 						 
 		rainScale = d3.scale.linear()
 						 .domain([Math.min.apply(Math,data.map(function(data){
@@ -231,7 +232,7 @@ function updateData(passed_data){
 						 , Math.max.apply(Math,data.map(function(data){
 						 return data[attrs[11]];})
 						 )])
-						 .range([0, svgw]);
+						 .range([0, svgw*scale]);
 			
 		
 		for(var i = 0; i < data.length; i++){
@@ -340,8 +341,8 @@ function controlRedraw(){
 		var tempvar = phScale(site.ph.value);
 		if(tempvar <= 0)
 			tempvar = 0;
-		if(tempvar >= svgw)
-			tempvar = svgw;
+		if(tempvar >= svgw*scale)
+			tempvar = svgw*scale;
 		return tempvar;})
    		.attr("cy",function(d){
 		
@@ -358,8 +359,8 @@ function controlRedraw(){
 		var tempvar = rainScale(1/((1/site.irragate.value)+(site.rainfall/365)));
 		if(tempvar <= 0)
 			tempvar = 0;
-		if(tempvar >= svgw)
-			tempvar = svgw;
+		if(tempvar >= svgw*scale)
+			tempvar = svgw*scale;
 		return tempvar;})
    		.attr("cy",function(d){
 		
@@ -376,8 +377,8 @@ function controlRedraw(){
 		var tempvar = sunScale(site.shade.value);
 		if(tempvar <= 0)
 			tempvar = 0;
-		if(tempvar >= svgw)
-			tempvar = svgw;
+		if(tempvar >= svgw*scale)
+			tempvar = svgw*scale;
 		return tempvar;})
    		.attr("cy",function(d){
 		
@@ -440,7 +441,7 @@ function initialize(){
 		  .attr("id",function(d){return "i" + d.id;});
 		g.exit().remove();
 		g.append("path")
-		.attr("d",function(d){return "m "+svgw/2+" "+ 250})
+		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
 		transform();
 		setMouseEvent();
 		controlRedraw();
@@ -456,7 +457,7 @@ function initialize(){
 			.attr("class","baseline")
 			.attr("x1",translateX)
 			.attr("y1",translateY+250)
-			.attr("x2",translateX+svgw)
+			.attr("x2",translateX+(svgw*scale))
 			.attr("y2",translateY+250)
 			
 		for(var i = 1; i<attrs.length-dstart +1; i++){
@@ -464,7 +465,7 @@ function initialize(){
 			.attr("class","grids")
 			.attr("x1",translateX)
 			.attr("y1",translateY+250 - steps * i)
-			.attr("x2",translateX+svgw)
+			.attr("x2",translateX+(svgw*scale))
 			.attr("y2",translateY+250 - steps * i)
 		}
 		
@@ -608,7 +609,7 @@ function transform(){
 	svg.append("text")
 		.attr("class","gridtext")
 		.attr("id",i)
-   		.attr("x",translateX+svgw+50)
+   		.attr("x",translateX+(svgw*scale)+50)
    		.attr("y",translateY+250 - steps * (i-dstart+1))
 		.text(display[i])
 		
@@ -624,7 +625,7 @@ function transform(){
 	svg.append("image")
 		.attr("class","gridcontrol")
 		.attr("id",i)
-		.attr("x",translateX+svgw+50)
+		.attr("x",translateX+(scale*svgw)+50)
 		.attr("y",translateY+250 - steps * (i-dstart+1) - 30)
 		.attr("width",16)
 		.attr("height",16)
@@ -634,7 +635,7 @@ function transform(){
 	svg.append("image")
 		.attr("class","gridcontrol")
 		.attr("id",i)
-		.attr("x",translateX+svgw+50)
+		.attr("x",translateX+(svgw*scale)+50)
 		.attr("y",translateY+250 - steps * (i-dstart+1) + 5)
 		.attr("width",16)
 		.attr("height",16)
@@ -649,8 +650,8 @@ function transform(){
 	*/
    g
   .select("path").transition().duration(1000)
-  .attr("d",function(d){return "m "+svgw/2+" "+ 250 
-  +" l " + (d[attrs[dstart]]-svgw/2) + " -" + steps 
+  .attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250 
+  +" l " + (d[attrs[dstart]]-(svgw*scale)/2) + " -" + steps 
   + " l " + (d[attrs[dstart+1]]-d[attrs[dstart]]) + " -" + steps 
   + " l " + (d[attrs[dstart+2]]-d[attrs[dstart+1]]) + " -" + steps 
   + " l " + (d[attrs[dstart+3]]-d[attrs[dstart+2]]) + " -" + steps
