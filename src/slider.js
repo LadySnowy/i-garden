@@ -15,10 +15,8 @@ div.onmouseout=function()
 }
 ;
 
-//onmouseover="document.getElementByClass('thing').style.display = 'block';"
-
 //make paragraph for label
-var para=document.createElement("p");
+var para=document.createElement("div");
 //make label
 var lab=document.createElement("label");
 lab.htmlFor="amount"+arr[itemNum].id;
@@ -41,31 +39,52 @@ para.appendChild(inp);
 var div1=document.createElement("div");
 div1.id="slider"+arr[itemNum].id;
 
-//create site
-var plot=document.createElementNS("http://www.w3.org/2000/svg", "svg");
-plot.setAttribute("height", 30);
-plot.setAttribute("width", "100%");
+//create close button
+var close=document.createElementNS("http://www.w3.org/2000/svg", "svg");
+close.setAttribute("height", 15);
+close.setAttribute("width", "100%");
 
+var txx=document.createElementNS("http://www.w3.org/2000/svg", "text");
+txx.setAttribute("x", "95%");
+txx.setAttribute("y", 10);
+txx.textContent = "x";
+txx.onclick=function()
+{
+	deletPlant(arr[itemNum].id);
+};
+
+close.appendChild(txx);
+div.appendChild(close); 
+
+//create labels
+var plot=document.createElementNS("http://www.w3.org/2000/svg", "svg");
+plot.setAttribute("height", 23);
+plot.setAttribute("width", "100%");
 
 var tx=document.createElementNS("http://www.w3.org/2000/svg", "text");
 tx.setAttribute("x", 0);
-tx.setAttribute("y", 30);
+tx.setAttribute("y", 23);
 tx.textContent = min;
 
 var tx1=document.createElementNS("http://www.w3.org/2000/svg", "text");
-tx1.setAttribute("x", "90%");
-tx1.setAttribute("y", 30);
+tx1.setAttribute("x", "94%");
+tx1.setAttribute("y", 23);
 tx1.setAttribute("style", "align:right;");
 tx1.textContent = max;
 
 plot.appendChild(tx);
 plot.appendChild(tx1);
 
-div1.appendChild(plot);  
+div1.appendChild(plot);
+
+var para1=document.createElement("p");
+var para2=document.createElement("p");
 
 //add everything to the vegitable contanier div
 div.appendChild(para);
 div.appendChild(div1);
+div.appendChild(para1);
+div.appendChild(para2);
 
 //add vegitable contanier to vegList
 var element=document.getElementById("list");
@@ -194,7 +213,7 @@ function addPlant(id)
 			//adds vegitable to array
 			window.list.push(m);			
 		}
-		
+		//foGraCircle(window.list);
 		redra();
 	});
 }
@@ -399,6 +418,7 @@ function vegOver(id){
 	//alert(window.allList[id-1].id);
 	id=id-1;
 	//alert(window.allList[id].id);
+	fade(.1, visc, "", id);
 	
 	//get the plant ph
 	var y=window.allList[id].soil_ph;
@@ -457,7 +477,7 @@ function vegOver(id){
 	document.getElementById('SunshineRec').setAttribute("display", "block");
 	document.getElementById('SunshineRec').setAttribute("x", xnum+"%");
 	document.getElementById('SunshineRec').setAttribute("width", widthnum+"%");
-	
+	/*
 	//modify the calender
 {
 	document.getElementById('CalCompStart').setAttribute("opacity", "0");
@@ -500,18 +520,20 @@ function vegOver(id){
 	
 	
 
-	document.getElementById('CalCompHarv').setAttribute("opacity", "0");	
+	document.getElementById('CalCompHarv').setAttribute("opacity", "0");
+	*/
 }
 
 function vegOut(id){
 	document.getElementById('PHRec').setAttribute("display", "none");
 	document.getElementById('IrrigationRec').setAttribute("display", "none");
 	document.getElementById('SunshineRec').setAttribute("display", "none");
-	
+	/*
 	document.getElementById('CalCompStart').setAttribute("opacity", "1");
 	document.getElementById('CalCompTrans').setAttribute("opacity", "1");
 	document.getElementById('CalCompGrow').setAttribute("opacity", "1");
 	document.getElementById('CalCompHarv').setAttribute("opacity", "1");
+	*/
 }
 
 function getRecipeInfo(callback)

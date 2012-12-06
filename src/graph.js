@@ -272,7 +272,7 @@ function foGra(arr)
 
 function foGraCircle(arr)
 {
-	///alert(arr);
+	//alert(arr);
 	var w = d3.select("#botright").style("width").slice(0,-2)*.93,
 		h = d3.select("#botright").style("height").slice(0,-2)-90,
 		fill = d3.scale.category10(),
@@ -418,13 +418,18 @@ function forceColor(vis){
 	vis.selectAll("circle").style("stroke", function(d, i) { return d3.rgb(calcColor(d.health)).darker(2); });
 }
 
-function fade(opacity, vis, display) {
-        return function(d, i) {
-			if(display == "none")
-			{
-				vegOut();
+function fade(opacity, vis, display, m) {
+		return function(d, i) {
+			//alert("hi");
+			if(m === undefined){
+				if(display == "none")
+				{
+					vegOut();
+				}else{
+					vegOver(i);
+				}
 			}else{
-				vegOver(i);
+				i=m;
 			}
 			//alert(d.id);
 			//make link list
