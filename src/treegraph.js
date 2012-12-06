@@ -115,6 +115,21 @@ function focus(plant_id){
 	  } return newObj;
 	};
 
+function dataChanged(passed_data){
+		updateData(passed_data);
+		g = svg.selectAll("g").data(data);
+		g.enter()
+		  .append("g")
+		  .attr("transform",function(d,i) {return "translate("+translateX+", "+translateY+")";})
+		  .attr("id",function(d){return "i" + d.id;})
+		  .append("path")
+		.attr("d",function(d){return "m "+(svgw*scale)/2+" "+ 250})
+		g.exit().remove();
+		transform();
+		setMouseEvent();
+		controlRedraw();
+}
+
 function updateData(passed_data){
 	
 	
