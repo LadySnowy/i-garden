@@ -73,48 +73,51 @@
 
 <div id="container">
 
-
-	<div id = "center">
-		Plants
-		<div class="ui-widget">
-			<label for="tags">Add: </label>
-			<input id="tags" onkeypress="goSubmit(event)"/>
+	<div id = "left">
+		<div id = "center">
+			Plants
+			<div class="ui-widget">
+				<label for="tags">Add: </label>
+				<input id="tags" onkeypress="goSubmit(event)"/>
+			</div>
+			<div id="vegList">
+				<script>
+					drawList();
+					addPlant(35);
+					addPlant(58);
+					addPlant(43);
+					addPlant(15);
+					addPlant(20);
+					//deletPlant(1);
+					calculateHealth();				
+				</script>
+			</div>
+			<div id="vegSelect">
+			</div>
 		</div>
-		<div id="vegList">
-			<script>
-				drawList();
-				addPlant(35);
-				addPlant(58);
-				addPlant(43);
-				addPlant(15);
-				addPlant(20);
-				//deletPlant(1);
-				calculateHealth();				
-			</script>
-		</div>
-		<div id="vegSelect">
+		
+		<div id = "topright">
+				Conditions
+				<div id="siteList"></div>
+				
+				<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.ph);</script></div>
+				<div style="float:left"><script>makeSliderObj(window.site.irragate);</script></div>
+				<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.shade);</script></div>
+				<script>cale();</script>	
+				<br />
+				Hardiness Zone <input id="zone" type="text" size="3"/><br /> Average Annual Rainfall <input id="rain" type="text" size="3"/>
+				<script>
+				document.getElementById('zone').value = site.zone;
+				document.getElementById('zone').onchange=function(){site.zone = document.getElementById('zone').value;};
+				document.getElementById('rain').value = site.rainfall;
+				document.getElementById('rain').onchange=function(){site.rainfall = document.getElementById('rain').value;}
+				</script>
+				
 		</div>
 	</div>
 
 	<div id = "right">
-		<div id = "topright">
-			Conditions
-			<div id="siteList"></div>
-			
-			<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.ph);</script></div>
-			<div style="float:left"><script>makeSliderObj(window.site.irragate);</script></div>
-			<div style="float:left; position:relative; width: 30%"><script>makeSliderObj(window.site.shade);</script></div>
-			<script>cale();</script>	
-			
-			Hardiness Zone <input id="zone" type="text" size="3"/> Average Annual Rainfall <input id="rain" type="text" size="3"/>
-			<script>
-			document.getElementById('zone').value = site.zone;
-			document.getElementById('zone').onchange=function(){site.zone = document.getElementById('zone').value;};
-			document.getElementById('rain').value = site.rainfall;
-			document.getElementById('rain').onchange=function(){site.rainfall = document.getElementById('rain').value;}
-			</script>
-			
-		</div>
+		
 		
 		<div id = "botright" class="tabcontainer">
 			<div class="tab_nav">
