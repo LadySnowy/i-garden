@@ -278,8 +278,8 @@ function foGraCircle(arr)
 		fill = d3.scale.category10(),
 		nodes = arr.map(Object);
 		nodes.forEach(function(o, i) {
-			o.y = (h/2)+(350*(Math.sin((2*3.14/59)*(i+.5))));
-			o.x = (w/2)+(350*(Math.cos((2*3.14/59)*(i+.5))));
+			o.y = (h/2)+(325*(Math.sin((2*3.14/59)*(i+.5))));
+			o.x = (w/2)+(325*(Math.cos((2*3.14/59)*(i+.5))));
 		});
 		links = new Array();
 	//alert(fill);

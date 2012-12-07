@@ -39,7 +39,7 @@ font-size: 13px;
 }
 
 #topright{
-	height: 34%;
+	height: 39%;
 	border:5px solid green;
 	border-radius:25px;
 	background-color: #C9E4C9;
@@ -58,7 +58,7 @@ padding: 2px 5px;
 
 #botright{
     padding-top: 10px;
-	height:100%;
+	height: 100%;
 	border:5px solid green;
 	border-radius:25px;
 	background-color: #C9E4C9;
@@ -68,7 +68,7 @@ padding: 2px 5px;
 #center{
 	border:5px solid green;
 	border-radius:25px;
-	height: 65%;
+	height: 60%;
 	background-color: #C9E4C9;
 	margin-top: 5px;
 }
