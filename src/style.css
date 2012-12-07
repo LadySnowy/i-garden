@@ -1,5 +1,5 @@
 html, body {
-height: 100%;
+height: 98%;
 font-family: tahoma;
 font-size: 13px;
 }
@@ -39,7 +39,7 @@ font-size: 13px;
 }
 
 #topright{
-	height: 32%;
+	height: 34%;
 	border:5px solid green;
 	border-radius:25px;
 	background-color: #C9E4C9;
